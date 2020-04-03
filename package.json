@@ -1,0 +1,16 @@
+{
+  "name": "web-tutorial",
+  "version": "1.0.0",
+  "description": "A project intended to teach you the minimum amount of web development necessary to make your own websites",
+  "main": "app.js",
+  "devDependencies": {},
+  "scripts": {
+    "start": "node app.js"
+  },
+  "author": "Surya Jasper",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "socket.io": "^2.3.0"
+  }
+}

@@ -65,13 +65,16 @@ sidebarshow.onclick = function() {
   }
 }
 
-for (var i = 0; i < h1.length; i++) {
-  h1[i].id = h1[i].innerHTML;
-  var a = document.createElement('a');
-  a.href = '#' + h1[i].innerHTML;
-  a.innerHTML = h1[i].innerHTML;
-  sidenav.appendChild(a);
+function refreshHeadings() {
+  for (var i = 0; i < h1.length; i++) {
+    h1[i].id = h1[i].innerHTML;
+    var a = document.createElement('a');
+    a.href = '#' + h1[i].innerHTML;
+    a.innerHTML = h1[i].innerHTML;
+    sidenav.appendChild(a);
+  }
 }
+refreshHeadings();
 
 function dropdown(name, values) {
   var dropdiv = document.createElement('div');
@@ -113,31 +116,40 @@ function addNewSection() {
   legend.appendChild(legendHeader);
   legend.appendChild(legendInput);
   fieldset.appendChild(legend);
-  var newDropdown = dropdown('Add new element', ['heading 1', 'heading 2', 'heading 3', 'heading 4', 'code']);
+  var newDropdown = dropdown('Add new element', ['<h2>heading 1</h2>', '<h3>heading 2</h3>', '<h4>heading 3</h4>', '<p>text</p>', 'link', 'code']);
   var dropdiv = newDropdown.dd;
   var anchors = newDropdown.aa;
   console.log(anchors);
 
-  var elementsInSection = [];
+  var elementParams = []; // arr of dicts
+  var elementTypes = [];
 
   for (var anchor of anchors) {
     anchor.onclick = function(e) {
       e.preventDefault();
-      var anchInput;
+      var anchparams = {};
       if (this.innerHTML === 'code') {
-        anchInput = document.createElement('textarea');
-        /*anchInput.onkeydown = function(event) {
-          insertTab(this, event);
-        }*/
+        anchparams['code'] = document.createElement('textarea');
+      } else if (this.innerHTML === 'link') {
+        anchparams['name'] = document.createElement('input');
+        anchparams['name'].type = 'text';
+        anchparams['name'].style.display = 'inline-block';
+        anchparams['link'] = document.createElement('input');
+        anchparams['link'].type = 'text';
+      } else if (this.innerHTML === '<p>text</p>') {
+        anchparams['content'] = document.createElement('textarea');
       }
       else {
-        anchInput = document.createElement('input');
-        anchInput.type = "text";
+        anchparams['content'] = document.createElement('input');
+        anchparams['content'].type = "text";
       }
       var type = this.innerHTML;
-      anchInput.setAttribute('placeholder', type);
-      elementsInSection.push(anchInput);
-      fieldset.insertBefore(anchInput, dropdiv);
+      for (var key of Object.keys(anchparams)) {
+        anchparams[key].setAttribute('placeholder', key);
+        fieldset.insertBefore(anchparams[key], dropdiv);
+      }
+      elementTypes.push(this.innerHTML);
+      elementParams.push(anchparams);
     }
   }
 
@@ -148,40 +160,43 @@ function addNewSection() {
     section.id = legendInput.value;
     var h1LegendHeader = document.createElement('h1');
     h1LegendHeader.innerHTML = legendInput.value;
+    h1LegendHeader.style.textAlign = 'center';
     section.appendChild(h1LegendHeader);
 
-    for (var i = 0; i < elementsInSection.length; i++) {
+    for (var i = 0; i < elementTypes.length; i++) {
       var elementString;
-      if (elementsInSection[i].placeholder === 'code') {
-        elementString = '<pre class="language-javascript" data-src-loaded="" data-src="../resources/prism/prism.js"><code class="language-javascript">' + elementsInSection[i].value + '</code></pre>';
-      } else {
-        switch (elementsInSection[i].placeholder) {
-          case 'heading 1':
-            elementString = '<h1>' + elementsInSection[i].value + '</h1>';
-            break;
-          case 'heading 2':
-            elementString = '<h2>' + elementsInSection[i].value + '</h2>';
-            break;
-          case 'heading 3':
-            elementString = '<h3>' + elementsInSection[i].value + '</h3>';
-            break;
-          case 'heading 4':
-            elementString = '<h4>' + elementsInSection[i].value + '</h4>';
-            break;
-        }
+      switch (elementTypes[i]) {
+        case 'code':
+          elementString = '<pre class="language-javascript" data-src-loaded="" data-src="../resources/prism/prism.js"><code class="language-javascript">' + elementParams[i]['code'].value + '</code></pre>';
+          break;
+        case '<h2>heading 1</h2>':
+          elementString = '<h2>' + elementParams[i]['content'].value + '</h2>';
+          break;
+        case '<h3>heading 2</h3>':
+          elementString = '<h3>' + elementParams[i]['content'].value + '</h3>';
+          break;
+        case '<h4>heading 3</h4>':
+          elementString = '<h4>' + elementParams[i]['content'].value + '</h4>';
+          break;
+        case '<p>text</p>':
+          elementString = '<p>' + elementParams[i]['content'].value + '</p>';
+          break;
+        case 'link':
+          elementString = '<a href = "' + elementParams[i]['link'].value + '">' + elementParams[i]['name'].value + '</a>';
+          break;
       }
+      console.log(elementString);
       section.appendChild(ElementHTML.makeTagFromString(elementString));
     }
 
     main.replaceChild(section, fieldset);
     Prism.highlightAll();
+    refreshHeadings();
   };
 
   fieldset.appendChild(dropdiv);
   fieldset.appendChild(createSection);
   main.appendChild(fieldset);
-
-  legendInput.click();
 }
 
 var newDiv = document.createElement('a');
@@ -189,5 +204,6 @@ newDiv.innerHTML = '+';
 newDiv.style.textAlign = "center";
 newDiv.onclick = function() {
   addNewSection();
+  window.scrollTo(0,document.body.scrollHeight);
 }
 sidenav.appendChild(newDiv);

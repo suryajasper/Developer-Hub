@@ -1,0 +1,57 @@
+<html>
+  <head>
+    <title>HTML tutorial</title>
+    <meta charset = "utf-8" name="viewport" content="width=device-width, initial-scale=1.0">
+    <script
+			  src="https://code.jquery.com/jquery-3.4.1.min.js"
+			  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+			  crossorigin="anonymous"></script>
+  </head>
+  <link rel="stylesheet" href="../resources/css/main.css">
+  <link rel="stylesheet" href="../resources/prism/prism.css">
+  <script src="/socket.io/socket.io.js"></script>
+  <script src = "../resources/prism/prism.js"></script>
+  <body >
+    <div class = "header-outer">
+      <header class = "header">
+        <img id = "sidebarshow" src = "../resources/images/sidebar.svg" style = "height: 53px; width: 53px;"></img>
+        <!--img width = "44" height = "36" class = "jbg-top-logo" alt = "jbg-top-logo" src = "images/jasperboxlarge.png"></img>
+        <img class = "jbg-top-logo" alt = "jbg-top-logo" src = "images/logo.svg"></img-->
+        <img width = "44" height = "44" class = "centered-horizontal top-logo" alt = "top-logo" src = "../resources/images/trashcan.png"></img>
+      </header>
+    </div>
+    <div id = "sidenav" class="sidenav">
+      <!--a style = "margin-top: 60px;" href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#clients">Clients</a>
+      <a href="#contact">Contact</a-->
+    </div>
+    <div class = "main" style = "margin-top: 50px;">
+      <section id = "Basic Syntax">
+        <h1 style = "text-align: center; margin-top: 70px;">Basic Syntax</h1>
+        <h3>You have probably seen many HTML files before, and are already probably vaguely familiar with the syntax. The most important thing to remember is that any HTML file can simply be thought of as a selection of nodes (the things we see on the screen like buttons, text, input fields, canvases, images, etc.). And every node starts with a start tag: <code class = "language-markup">&lt;p></code> and a close tag: <code class = "language-markup">&lt;p></code>. Every node can contain an innerHTML component which is the content between the start tag and the close tag. For example a button with the text "click me" inside would be formatted as <code class = "language-markup">&lt;button>click me&lt;/button></code>. All parameters for the node are inside the open tag (after the node name) and separated by spaces. these parameters are assigned string values like so <code class = "language-markup">&lt;button onclick = "myFunction()" style = "text-align: center;">click me&lt;/button></code>. But every HTML file has to start somewhere, right? Well, you can really start anywhere when writing HTML code, but it's good to start with the following basic setup as it accounts for mobile support and sets up the base for all code you will write.
+        </h3>
+<pre class="language-markup"><code class="language-markup">&lt;html>
+  &lt;head>
+    &lt;title>Title</title>
+    &lt;meta charset = "utf-8" name="viewport" content="width=device-width, initial-scale=1.0">
+  &lt;/head>
+  &lt;body>
+
+  &lt;/body>
+&lt;/html></code></pre>
+        <h3>As you can see here, we can put nodes inside of other nodes. Now, that's literally all you  need to know for the basic syntax of HTML, but there are a few more things to keep in mind before we get into details about each node.</h3>
+        <h2>Head vs. Body</h2>
+        <h3>In the basic layout, you can see that we have a head and body node and that everything is inside of those nodes. But what do we keep in each one? Well, it's actually pretty easy. Think of the head node as the base for your document. It can contain a title which is the text displayed on the tab, a meta which specifies the character encoding for the rest of the document (not worth getting into details on, but it basically allows mobile device functionality and not having to specify charset="utf-8" on every script node), and an icon which is the image that is displayed on the tab (usually your website logo). Don't think of your head as a header, because it never contains stuff that is visible inside the document. On the other hand, the body contains everything that <b>is</b> visible in the document. As an example, everything you see in this page right now is in the body node, but if you look at the tab where it says "HTML tutorial", that was specified in the head node.</h3>
+      </section>
+      <section id = "text nodes">
+        <h1 style="text-align: center;">Text Nodes</h1>
+        <h2>Headings</h2>
+        <h3>There are 6 headings in HTML: h1, h2, h3, h4, h5, and h6. As you go down the list, the headings get smaller and represent less important or more specific things. These are good ways to divide your website into sections. In this website, we use h1 for each section title, h2 for each important section topic, h3 for explanations of each topic or for list elements, and h4 for explanations of code.</h3>
+        <h2>Regular text</h2>
+        
+      </section>
+    </div>
+  <script src = "../resources/js/main.js"></script>
+  </body>
+</html>

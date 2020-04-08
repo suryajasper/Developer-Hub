@@ -18,6 +18,13 @@ class ElementHTML {
   }
 }
 
+function urlify(text) {
+  var urlRegex = /(https?:\/\/[^\s]+)/g;
+  return text.replace(urlRegex, function(url) {
+    return '<a href="' + url + '">' + url + '</a>';
+  });
+}
+
 var h1 = document.getElementsByTagName('h1');
 var sidenav = document.getElementById('sidenav');
 var sidebarshow = document.getElementById('sidebarshow');
@@ -65,7 +72,21 @@ sidebarshow.onclick = function() {
   }
 }
 
+function createNewDivAnchor() {
+  var newDiv = document.createElement('a');
+  newDiv.innerHTML = '+';
+  newDiv.href = "#";
+  newDiv.style.textAlign = "center";
+  newDiv.onclick = function(e) {
+    e.preventDefault();
+    addNewSection();
+    window.scrollTo(0,document.body.scrollHeight);
+  }
+  return newDiv;
+}
+
 function refreshHeadings() {
+  $('#sidenav').empty();
   for (var i = 0; i < h1.length; i++) {
     h1[i].id = h1[i].innerHTML;
     var a = document.createElement('a');
@@ -73,6 +94,7 @@ function refreshHeadings() {
     a.innerHTML = h1[i].innerHTML;
     sidenav.appendChild(a);
   }
+  sidenav.appendChild(createNewDivAnchor());
 }
 refreshHeadings();
 
@@ -163,6 +185,8 @@ function addNewSection() {
     h1LegendHeader.style.textAlign = 'center';
     section.appendChild(h1LegendHeader);
 
+    var stringToAppend = '';
+
     for (var i = 0; i < elementTypes.length; i++) {
       var elementString;
       switch (elementTypes[i]) {
@@ -170,25 +194,26 @@ function addNewSection() {
           elementString = '<pre class="language-javascript" data-src-loaded="" data-src="../resources/prism/prism.js"><code class="language-javascript">' + elementParams[i]['code'].value + '</code></pre>';
           break;
         case '<h2>heading 1</h2>':
-          elementString = '<h2>' + elementParams[i]['content'].value + '</h2>';
+          elementString = '<h2>' + urlify(elementParams[i]['content'].value) + '</h2>';
           break;
         case '<h3>heading 2</h3>':
-          elementString = '<h3>' + elementParams[i]['content'].value + '</h3>';
+          elementString = '<h3>' + urlify(elementParams[i]['content'].value) + '</h3>';
           break;
         case '<h4>heading 3</h4>':
-          elementString = '<h4>' + elementParams[i]['content'].value + '</h4>';
+          elementString = '<h4>' + urlify(elementParams[i]['content'].value) + '</h4>';
           break;
         case '<p>text</p>':
-          elementString = '<p>' + elementParams[i]['content'].value + '</p>';
+          elementString = '<p>' + urlify(elementParams[i]['content'].value) + '</p>';
           break;
         case 'link':
           elementString = '<a href = "' + elementParams[i]['link'].value + '">' + elementParams[i]['name'].value + '</a>';
           break;
       }
       console.log(elementString);
-      section.appendChild(ElementHTML.makeTagFromString(elementString));
+      stringToAppend += elementString;
     }
 
+    section.innerHTML += stringToAppend;
     main.replaceChild(section, fieldset);
     Prism.highlightAll();
     refreshHeadings();
@@ -198,12 +223,3 @@ function addNewSection() {
   fieldset.appendChild(createSection);
   main.appendChild(fieldset);
 }
-
-var newDiv = document.createElement('a');
-newDiv.innerHTML = '+';
-newDiv.style.textAlign = "center";
-newDiv.onclick = function() {
-  addNewSection();
-  window.scrollTo(0,document.body.scrollHeight);
-}
-sidenav.appendChild(newDiv);

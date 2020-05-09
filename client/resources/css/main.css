@@ -154,8 +154,8 @@ textarea {
   resize: vertical;
   max-height: 40vh;
   font-family: inherit;
-  background-color:#e3e5e8;
-  border: 2px solid #e3e5e8;
+  background-color:#414141;
+  border: 2px solid #414141;
   border-radius: 4px;
   padding: 8px 13px;
 }
@@ -175,29 +175,34 @@ textarea:hover {
 }
 input[type=text] {
   display: block;
-  background-color:#e3e5e8;
-  border: 2px solid #e3e5e8;
+  background-color:#414141;
+  border: 2px solid #414141;
   border-radius: 4px;
   padding: 8px 13px;
   width: 500;
   font-size:14px;
+  color: white;
   cursor: pointer;
+  -webkit-transition: 0.5s;
 }
 
 input[type=submit] {
-  background-color:#e3e5e8;
-  border: 2px solid #e3e5e8;
+  background-color:#414141;
+  border: 2px solid #414141;
   border-radius: 4px;
   padding: 12px 20px;
   font-size:14px;
+  cursor: pointer;
+  -webkit-transition: 0.5s;
 }
 
 input[type=number] {
-  background-color:#e3e5e8;
-  border: 2px solid #e3e5e8;
+  background-color:#414141;
+  border: 2px solid #414141;
   border-radius: 4px;
   padding: 12px 20px;
   font-size:14px;
+  -webkit-transition: 0.5s;
 }
 .inputfile {
 	width: 0.1px;
@@ -211,7 +216,7 @@ input[type=number] {
   border-radius: 4px;
   padding: 12px 20px;
   color: black;
-  background-color: #e3e5e8;
+  background-color: #414141;
   display: inline-block;
   cursor: pointer;
 }
@@ -233,7 +238,7 @@ input::-webkit-inner-spin-button {
 
 button {
   margin-top: 10;
-  background-color:#e3e5e8;
+  background-color:#414141;
   border: none;
   border-radius: 4px;
   padding: 12px 20px;
@@ -246,28 +251,35 @@ button:hover {
 }
 
 input[type=button] {
-  background-color:#e3e5e8;
-  border: 2px solid #e3e5e8;
+  background-color:#414141;
+  border: 2px solid #414141;
   border-radius: 4px;
   padding: 12px 20px;
   font-size:14px;
   cursor: pointer;
+  -webkit-transition: 0.5s;
 }
 
 input[type=password] {
-  background-color:#e3e5e8;
-  border: 2px solid #e3e5e8;
+  background-color:#414141;
+  border: 2px solid #414141;
   border-radius: 4px;
   padding: 12px 20px;
   font-size:14px;
+  color: white;
+  -webkit-transition: 0.5s;
 }
 
 input[type=text]:focus {
   border: 3px solid #909090;
+  color: white;
   -webkit-transition: 0.5s;
 }
+input[type=text]::placeholder {
+  color: white;
+}
 input[type=text]:hover {
-  background-color:#c4ccd9 ;
+  background-color:#535559 ;
   border: 3px solid #979ea4 ;
   -webkit-transition: 0.5s;
 }
@@ -340,4 +352,15 @@ section a {
 section a h1, h2, h3, h4, p {
   margin-top: 2px;
   margin-bottom: 2px;
+}
+
+.signup-block input {
+  display: inline-block;
+  margin-left: 6px;
+  margin-right: 6px;
+  margin-bottom: 12px;
+}
+
+.signup-block p {
+  display: block;
 }

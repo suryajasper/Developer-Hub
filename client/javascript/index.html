@@ -17,7 +17,12 @@
         <img id = "sidebarshow" src = "../resources/images/sidebar.svg" style = "height: 53px; width: 53px;"></img>
         <!--img width = "44" height = "36" class = "jbg-top-logo" alt = "jbg-top-logo" src = "images/jasperboxlarge.png"></img>
         <img class = "jbg-top-logo" alt = "jbg-top-logo" src = "images/logo.svg"></img-->
-        <img width = "44" height = "44" class = "centered-horizontal top-logo" alt = "top-logo" src = "../resources/images/trashcan.png"></img>
+        <div id = "top-options" style = "display: none;" class = "centered-horizontal top-logo" alt = "top-logo">
+          Editing mode: <select style = "display: inline-block;" id = "editMode" value = "viewing">
+            <option value = "viewing">Viewing</option>
+            <option value = "editing">Editing</option>
+          </select>
+        </div>
       </header>
     </div>
     <div id = "sidenav" class="sidenav">
@@ -378,6 +383,10 @@ function doneFindingDefinition(word, pos, definition) {
 </ol>
 </section>
     </div>
+  <script src="https://www.gstatic.com/firebasejs/7.9.3/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.9.3/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.9.3/firebase-database.js"></script>
+  <script src = "../resources/js/fireBase.js"></script>
   <script src = "../resources/js/main.js"></script>
   </body>
 </html>

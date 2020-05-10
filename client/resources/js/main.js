@@ -1,23 +1,3 @@
-class ElementHTML {
-  constructor(name, start, end) {
-    this.name = name;
-    this.start = start;
-    this.end = end;
-  }
-  makeTag(content) {
-    var doc = new DOMParser().parseFromString(this.start + content + this.end, "text/xml");
-    return doc.firstChild;
-  }
-  static makeTagFromElement(element, content) {
-    var doc = new DOMParser().parseFromString(element.start + content + element.end, "text/xml");
-    return doc.firstChild;
-  }
-  static makeTagFromString(elementstr) {
-    var doc = new DOMParser().parseFromString(elementstr, "text/xml");
-    return doc.firstChild;
-  }
-}
-
 function urlify(text) {
   var urlRegex = /(https?:\/\/[^\s]+)/g;
   return text.replace(urlRegex, function(url) {
@@ -29,36 +9,13 @@ var h1 = document.getElementsByTagName('h1');
 var sidenav = document.getElementById('sidenav');
 var sidebarshow = document.getElementById('sidebarshow');
 var main = document.getElementsByClassName('main')[0];
+var topBar = document.getElementById('top-options');
+var editMode = document.getElementById('editMode');
 
-function insertTab(o, e)
-{
-  console.log('inserting tab');
-	var kC = e.keyCode ? e.keyCode : e.charCode ? e.charCode : e.which;
-	if (kC == 9 && !e.shiftKey && !e.ctrlKey && !e.altKey)
-	{
-		var oS = o.scrollTop;
-		if (o.setSelectionRange)
-		{
-			var sS = o.selectionStart;
-			var sE = o.selectionEnd;
-			o.value = o.value.substring(0, sS) + "  " + o.value.substr(sE);
-			o.setSelectionRange(sS + 1, sS + 1);
-			o.focus();
-		}
-		else if (o.createTextRange)
-		{
-			document.selection.createRange().text = "  ";
-			e.returnValue = false;
-		}
-		o.scrollTop = oS;
-		if (e.preventDefault)
-		{
-			e.preventDefault();
-		}
-		return false;
-	}
-	return true;
-}
+var currentEdit = null;
+var currentToReplace = null;
+
+initializeFirebase();
 
 sidebarshow.onclick = function() {
   if (sidenav.style.display === 'block') {
@@ -85,7 +42,7 @@ function createNewDivAnchor() {
   return newDiv;
 }
 
-function refreshHeadings() {
+function refreshHeadings(addAddButton) {
   $('#sidenav').empty();
   for (var i = 0; i < h1.length; i++) {
     h1[i].id = h1[i].innerHTML;
@@ -94,9 +51,12 @@ function refreshHeadings() {
     a.innerHTML = h1[i].innerHTML;
     sidenav.appendChild(a);
   }
-  sidenav.appendChild(createNewDivAnchor());
+  if (addAddButton) {
+    sidenav.appendChild(createNewDivAnchor());
+  }
 }
-refreshHeadings();
+
+refreshHeadings(false);
 
 function dropdown(name, values) {
   var dropdiv = document.createElement('div');
@@ -222,4 +182,69 @@ function addNewSection() {
   fieldset.appendChild(dropdiv);
   fieldset.appendChild(createSection);
   main.appendChild(fieldset);
+}
+
+firebase.auth().onAuthStateChanged(user => {
+  if(user) {
+    refreshHeadings(true);
+    topBar.style.display = 'inline-block';
+  }
+});
+
+function makeLastEditView() {
+  currentEdit.style.border = 'none';
+  currentEdit.innerHTML = currentToReplace.value;
+  currentToReplace.parentNode.replaceChild(currentEdit, currentToReplace);
+}
+
+editMode.onchange = function() {
+  var headings = ['h1', 'h2', 'h3', 'h4', 'pre', 'p'];
+  if (editMode.value === 'editing') {
+    for (var heading of headings) {
+      var headingAll = document.getElementsByTagName(heading);
+      if (headingAll.length > 0) {
+        for (var element of headingAll) {
+          element.onmouseover = function() {
+            this.style.border = "1px solid white";
+          }
+          element.onmouseout = function() {
+            this.style.border = "none";
+          }
+          element.onclick = function() {
+            if (currentToReplace !== null) {
+              makeLastEditView();
+            }
+            currentEdit = this;
+            if (this.tagName === 'PRE') {
+              var input = document.createElement('textarea');
+              input.style.display = this.style.display;
+              input.style.width = "100%";
+              var fontSize = parseFloat(window.getComputedStyle(this, null).getPropertyValue('font-size')).toString();
+              input.style.fontSize = fontSize;
+              input.style.textAlign = this.style.textAlign;
+              input.value = this.innerHTML;
+              this.parentNode.replaceChild(input, this);
+              input.focus();
+              currentToReplace = input;
+            }
+            else {
+              var input = document.createElement('input');
+              input.style.display = this.style.display;
+              input.style.width = "100%";
+              var fontSize = parseFloat(window.getComputedStyle(this, null).getPropertyValue('font-size')).toString();
+              input.style.fontSize = fontSize;
+              input.style.textAlign = this.style.textAlign;
+              input.value = this.innerHTML;
+              this.parentNode.replaceChild(input, this);
+              input.focus();
+              currentToReplace = input;
+            }
+          }
+        }
+      }
+    }
+  }
+  else {
+    makeLastEditView();
+  }
 }

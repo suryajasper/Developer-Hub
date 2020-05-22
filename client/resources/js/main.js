@@ -192,13 +192,16 @@ firebase.auth().onAuthStateChanged(user => {
 });
 
 function makeLastEditView() {
-  currentEdit.style.border = 'none';
-  currentEdit.innerHTML = currentToReplace.value;
-  currentToReplace.parentNode.replaceChild(currentEdit, currentToReplace);
+  if (currentEdit !== null) {
+    currentEdit.style.border = 'none';
+    currentEdit.innerHTML = currentToReplace.value;
+    currentToReplace.parentNode.replaceChild(currentEdit, currentToReplace);
+  }
 }
 
-editMode.onchange = function() {
+function handleEditMode() {
   var headings = ['h1', 'h2', 'h3', 'h4', 'pre', 'p'];
+  console.log(editMode.value);
   if (editMode.value === 'editing') {
     for (var heading of headings) {
       var headingAll = document.getElementsByTagName(heading);
@@ -246,5 +249,21 @@ editMode.onchange = function() {
   }
   else {
     makeLastEditView();
+    for (var heading of headings) {
+      var headingAll = document.getElementsByTagName(heading);
+      if (headingAll.length > 0) {
+        for (var element of headingAll) {
+          element.onmouseover = null;
+          element.onmouseout = null;
+          element.onclick = null;
+        }
+      }
+    }
   }
+}
+
+handleEditMode();
+
+editMode.oninput = function() {
+  handleEditMode();
 }

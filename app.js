@@ -14,8 +14,28 @@ admin.initializeApp({
   databaseURL: "https://developer-hub-2b06f.firebaseio.com"
 });
 
-io.on('connection', function(socket){
+var database = admin.database();
 
+var refSiteData = database.ref("siteData");
+
+io.on('connection', function(socket){
+  socket.on('changeSiteData', function(data) {
+    var topic = data.topic;
+    refSiteData.child(data.userID).child(topic).update({content: data.content});
+  })
+  socket.on('getSiteData', function(userID, topic) {
+    refSiteData.once('value', function(deltaSnap) {
+      if (deltaSnap.val() !== null) {
+        if (deltaSnap.val()[userID] !== null) {
+          refSiteData.child(userID).once("value", function(snapshot) {
+            if (snapshot.val()[topic] !== null) {
+              socket.emit('updateSiteData', snapshot.val()[topic]['content']);
+            }
+          })
+        }
+      }
+    })
+  })
 })
 
 http.listen(port, function(){

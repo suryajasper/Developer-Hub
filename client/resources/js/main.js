@@ -1,3 +1,5 @@
+var socket = io();
+
 function urlify(text) {
   var urlRegex = /(https?:\/\/[^\s]+)/g;
   return text.replace(urlRegex, function(url) {
@@ -11,11 +13,28 @@ var sidebarshow = document.getElementById('sidebarshow');
 var main = document.getElementsByClassName('main')[0];
 var topBar = document.getElementById('top-options');
 var editMode = document.getElementById('editMode');
+var topic =document.getElementById('topic').innerHTML;
 
 var currentEdit = null;
 var currentToReplace = null;
 
 initializeFirebase();
+
+firebase.auth().onAuthStateChanged(function(user) {
+  if (user) {
+    socket.emit('getSiteData', user.uid, topic);
+
+    document.getElementById('saveButton').onclick = function() {
+      socket.emit('changeSiteData', {userID: user.uid, topic: topic, content: main.innerHTML});
+    }
+
+    socket.on('updateSiteData', function(innerHTML) {
+      console.log(innerHTML);
+      main.innerHTML = innerHTML;
+      Prism.highlightAll();
+    })
+  }
+});
 
 sidebarshow.onclick = function() {
   if (sidenav.style.display === 'block') {

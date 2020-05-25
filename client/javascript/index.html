@@ -36,7 +36,7 @@
 <section id = "variables">
 <h1 style = "text-align: center;">Variables</h1>
 <h2>Syntax</h2>
-<h4>Let's take a look at how to define variables. In this example, you can see that there is no need to specify type.</h4>
+<p class = "medium">Let's take a look at how to define variables. In this example, you can see that there is no need to specify type.</p>
 <pre class="language-javascript" data-src-loaded="" data-src="../resources/prism/prism.js"><code class="language-javascript">var variable_name = 4;
 var variable_name = 3.141592;
 var variable_name = 'hello world';
@@ -44,7 +44,7 @@ var variable_name = "hello world";
 var variable_name = true;
 var variable_name = false;</code></pre>
 <h2>Difference between var and let</h2>
-<h4>var and let essentially serve the same purpose and can be used interchangeably. However, there is a slight difference when it comes to scope</h4>
+<p class = "medium">var and let essentially serve the same purpose and can be used interchangeably. However, there is a slight difference when it comes to scope</p>
 <pre class="language-javascript" data-src-loaded="" data-src="../resources/prism/prism.js"><code class="language-javascript">console.log(var1);
 var var1 = "hello world";
 // output = Error</code></pre>
@@ -52,22 +52,22 @@ var var1 = "hello world";
 let var1 = "hello world";
 // output = undefined</code></pre>
 <h2>null vs undefined</h2>
-<h3>undefined is javascript's notation for a variable whose value has not been assigned or has been assigned a value that caused an error</h3>
+<p class = "big">undefined is javascript's notation for a variable whose value has not been assigned or has been assigned a value that caused an error</p>
 <pre class="language-javascript" data-src-loaded="" data-src="../resources/prism/prism.js"><code class="language-javascript">var undTest;
 console.log(undTest); // output = undefined
 
 var x = "surya";
 console.log(x.attributeThatDoesNotExist); // output = undefined</code></pre>
-<h3>null on the other hand represents a variable whose value IS defined but has been specified as null by the developer. JavaScript will never assign a variable the value null. It can only be specified by the programmer which is why it is used.</h3>
+<p class = "big">null on the other hand represents a variable whose value IS defined but has been specified as null by the developer. JavaScript will never assign a variable the value null. It can only be specified by the programmer which is why it is used.</p>
 <pre class="language-javascript" data-src-loaded="" data-src="../resources/prism/prism.js"><code class="language-javascript">var nullVar = null;</code></pre>
 </section>
 
 <section id = "arrays">
 <h1 style = "text-align: center;">Arrays</h1>
 <h2>Defining an array</h2>
-<h3><b>Creating an empty array</b></h3>
+<p class = "big"><b>Creating an empty array</b></p>
 <pre class="language-javascript" data-src-loaded="" data-src="../resources/prism/prism.js"><code class="language-javascript">var arr = [];</code></pre>
-<h3><b>Initializing an array with values</b></h3>
+<p class = "big"><b>Initializing an array with values</b></p>
 <pre class="language-javascript" data-src-loaded="" data-src="../resources/prism/prism.js"><code class="language-javascript">var arr = [1, 2, 3, 4];</code></pre>
 <h2>Modifying an array</h2>
 <pre class="language-javascript" data-src-loaded="" data-src="../resources/prism/prism.js"><code class="language-javascript">var arr = [];
@@ -79,8 +79,8 @@ arr.unshift(1);
 arr.concat(3, 4, 5);
 // removing element from array by index
 arr.splice(i, j) // removes the values from index i to index i + j</code></pre>
-<h3><b>Removing an element from an array by value</b></h3>
-<h4>This one is not as simple. First, copy and paste the following code.</h4>
+<p class = "big"><b>Removing an element from an array by value</b></p>
+<p class = "medium">This one is not as simple. First, copy and paste the following code.</p>
 <pre class="language-javascript" data-src-loaded="" data-src="../resources/prism/prism.js"><code class="language-javascript">Array.prototype.remove = function() { // copy and paste this code
   var what, a = arguments, L = a.length, ax;
   while (L && this.length) {
@@ -91,7 +91,7 @@ arr.splice(i, j) // removes the values from index i to index i + j</code></pre>
   }
   return this;
 };</code></pre>
-<h4>Now you can do this!!</h4>
+<p class = "medium">Now you can do this!!</p>
 <pre class="language-javascript" data-src-loaded="" data-src="../resources/prism/prism.js"><code class="language-javascript">arr.remove("any value in the array");</code></pre>
 </section>
 
@@ -114,19 +114,19 @@ var valuesOfMyDict = Object.values(myDict); // returns values of a dictionary</c
 <h1 style = "text-align: center;">Loops</h1>
 <h2>For-loops</h2>
 <ol>
-<li><h3><b>3 expression for-loops</b></h3></li>
+<li><p class = "big"><b>3 expression for-loops</b></p></li>
 <pre class="language-javascript" data-src-loaded="" data-src="../resources/prism/prism.js"><code class="language-javascript">var myArr = [1, 2, 3];
 for (var i = 0; i < myArr.length; i++) {
   myArr[i] *= 2;
   console.log(myArr[i]);
 }</code></pre>
-<li><h3><b>for...of loops for looping through values of an array</b></h3></li>
-<h4>Note: you can't change the values of an array with this loop, but if the values being stored in the array are objects, you can obviously modify their attributes</h4>
+<li><p class = "big"><b>for...of loops for looping through values of an array</b></p></li>
+<p class = "medium">Note: you can't change the values of an array with this loop, but if the values being stored in the array are objects, you can obviously modify their attributes</p>
 <pre class="language-javascript" data-src-loaded="" data-src="../resources/prism/prism.js"><code class="language-javascript">for (var element of myArr) {
   element *= 2; // this does not change the value
   console.log(element); // this will print the value multiplied by 2, but the value in the actual array has not changed
 }</code></pre>
-<li><h3><b>To loop through dictionaries or structs, use the for...in loop</b></h3></li>
+<li><p class = "big"><b>To loop through dictionaries or structs, use the for...in loop</b></p></li>
 <pre class="language-javascript" data-src-loaded="" data-src="../resources/prism/prism.js"><code class="language-javascript">var myDict = {"surya": 15, "joseph": 52};
 for (var key in myDict) {
   console.log(key + ": " + myDict[key].toString());
@@ -141,15 +141,15 @@ for (var key in myDict) {
 <h1 style = "text-align: center;">Functions</h1>
 <h2>There are 3 main ways to define a function</h2>
 <ol>
-<li><h3><b>The traditional way</b></h3></li>
+<li><p class = "big"><b>The traditional way</b></p></li>
 <pre class="language-javascript" data-src-loaded="" data-src="../resources/prism/prism.js"><code class="language-javascript">function funcName(param1, param2) {
   // content of function
 }</code></pre>
-<li><h3><b>The variable declaration</b></h3></li>
+<li><p class = "big"><b>The variable declaration</b></p></li>
 <pre class="language-javascript" data-src-loaded="" data-src="../resources/prism/prism.js"><code class="language-javascript">var funcName = function(param1, param2) {
   // content of function
 };</code></pre>
-<h4>Why is this useful?<br>Well, it is important for a variety of purposes including event listeners, web sockets, and get requests. We'll cover web sockets and get requests later, but we'll go over the common event listener case now</h4>
+<p class = "medium">Why is this useful?<br>Well, it is important for a variety of purposes including event listeners, web sockets, and get requests. We'll cover web sockets and get requests later, but we'll go over the common event listener case now</p>
 <pre class="language-javascript" data-src-loaded="" data-src="../resources/prism/prism.js"><code class="language-javascript">var button = document.getElementById('myButton'); // linking variable with html button
 button.onclick = function() { // example with no parameters
   // this code will execute when the button is pressed
@@ -159,13 +159,13 @@ button.onclick = function(e) { // example with parameters
   // the rest of the code will also execute following the button press.
 };
 </code></pre>
-<h4>Always remember to enclose the function with whatever parentheses or squiggly brackets preceded it</h4>
+<p class = "medium">Always remember to enclose the function with whatever parentheses or squiggly brackets preceded it</p>
 <pre class="language-javascript" data-src-loaded="" data-src="../resources/prism/prism.js"><code class="language-javascript">var button = document.getElementById('myButton');
 button.addEventListener('click', function() {
   // code to execute upon press
 }); // you need to finish this off with the ) because a ( preceded the function</code></pre>
-<li><h3><b>Lamda Expressions</b></h3></li>
-<h4>This is simply interchangeable with the variable declarations, so use whichever.</h4>
+<li><p class = "big"><b>Lamda Expressions</b></p></li>
+<p class = "medium">This is simply interchangeable with the variable declarations, so use whichever.</p>
 <pre class="language-javascript" data-src-loaded="" data-src="../resources/prism/prism.js"><code class="language-javascript">var button = document.getElementById('myButton'); // linking variable with html button
 button.onclick = () => { // example with no parameters
   // this code will execute when the button is pressed
@@ -179,9 +179,9 @@ button.onclick = (e) => { // example with parameters
 </section>
 <section id = "structs">
 <h1 style = "text-align: center;">Structs</h1>
-<h3>Sorry, but these next 2 sections will be the longest and most confusing sections of this entire website. JavaScript structs share no similarities to any notations in any other languages. However, you must learn these because they are very frequently used.</h2>
+<p class = "big">Sorry, but these next 2 sections will be the longest and most confusing sections of this entire website. JavaScript structs share no similarities to any notations in any other languages. However, you must learn these because they are very frequently used.</h2>
 <h2>Syntax</h2>
-<h4>A javascript struct is simply an object, NOT A CLASS, with attributes and/or functions, so think of them as instances of a class. They are quick methods of storing small amounts of data while saving memory usage. Let's take a look at how they are defined</h4>
+<p class = "medium">A javascript struct is simply an object, NOT A CLASS, with attributes and/or functions, so think of them as instances of a class. They are quick methods of storing small amounts of data while saving memory usage. Let's take a look at how they are defined</p>
 <pre class="language-javascript" data-src-loaded="" data-src="../resources/prism/prism.js"><code class="language-javascript">var surya = {
   name: "Surya",
   age: 15,
@@ -216,7 +216,7 @@ if (surya.withdrawMoney(500)) {
   withdraw successful
 */</code></pre>
 <h2>Struct Factories</h2>
-<h3>Now, if this wasn't already complicated enough, there is something known as a struct factory that basically defies everything I have already explained about structs. However, eventually, in your web development journey, you would encounter this in some stack overflow page, so I'll save you the confusion then by confusing you now. A struct factory is essentially a function that allows you to create structs that behave like classes. Basically the meta strat for saving memory power.</h3>
+<p class = "big">Now, if this wasn't already complicated enough, there is something known as a struct factory that basically defies everything I have already explained about structs. However, eventually, in your web development journey, you would encounter this in some stack overflow page, so I'll save you the confusion then by confusing you now. A struct factory is essentially a function that allows you to create structs that behave like classes. Basically the meta strat for saving memory power.</p>
 <pre class="language-javascript" data-src-loaded="" data-src="../resources/prism/prism.js"><code class="language-javascript">function makeStruct(names) {
   var names = names.split(' ');
   var count = names.length;
@@ -232,7 +232,7 @@ var surya = new Person('Surya', 15, 867.90);</code></pre>
 </section>
 <section id = "classes">
 <h1>Classes</h1>
-<h3>Yes!! We finished structs! Now, classes will obviously be much simpler and much more straightforward since almost every language you've ever learned before has classes. Right? Wrong. JavaScript classes work in essentially the same way as classes in all other languages, but the syntax is very distinct. Let's take a look. And, I really hate to say this, but there are 2 ways to define a class in javascript</h3>
+<p class = "big">Yes!! We finished structs! Now, classes will obviously be much simpler and much more straightforward since almost every language you've ever learned before has classes. Right? Wrong. JavaScript classes work in essentially the same way as classes in all other languages, but the syntax is very distinct. Let's take a look. And, I really hate to say this, but there are 2 ways to define a class in javascript</p>
 <ol>
 <li><h2>Traditional classes</h2></li>
 <pre class="language-javascript" data-src-loaded="" data-src="../resources/prism/prism.js"><code class="language-javascript">class Person {
@@ -270,10 +270,10 @@ Person.prototype.depositMoney = function(amount) { // prototype functions are us
 
 <section id = "JSON">
 <h1 style = "text-align: center;">JSON</h1>
-<h3>As you probably already know, JSON is short for <b>J</b>ava<b>S</b>cript <b>O</b>bject <b>N</b>otation. Chances are you've encountered numerous files of type .json and are already quite familiar with the format. The main purpose of these JSON files is to store, send, and receive complex data. Almost all get-requests and server code use these files for communication, and even websites that don't require any of this use json files for local storage purposes</h3>
+<p class = "big">As you probably already know, JSON is short for <b>J</b>ava<b>S</b>cript <b>O</b>bject <b>N</b>otation. Chances are you've encountered numerous files of type .json and are already quite familiar with the format. The main purpose of these JSON files is to store, send, and receive complex data. Almost all get-requests and server code use these files for communication, and even websites that don't require any of this use json files for local storage purposes</p>
 <h2>the JSON static class</h2>
-<h4>The JSON class is a default class in JavaScript with a bunch of static methods to create and parse JSONs</h4>
-<h3><b>JavaScript object to JSON</b></h3>
+<p class = "medium">The JSON class is a default class in JavaScript with a bunch of static methods to create and parse JSONs</p>
+<p class = "big"><b>JavaScript object to JSON</b></p>
 <pre class="language-javascript" data-src-loaded="" data-src="../resources/prism/prism.js"><code class="language-javascript">var data = {
   name: "Surya Jasper",
   age: 15,
@@ -281,18 +281,18 @@ Person.prototype.depositMoney = function(amount) { // prototype functions are us
   gender: "M"
 };
 var dataToJSON = JSON.stringify(data); // output = '{"name":"Surya Jasper","age":15,"netWorth":860.9,"gender":"M"}'</code></pre>
-<h3><b>JSON string to JavaScript object</b></h3>
+<p class = "big"><b>JSON string to JavaScript object</b></p>
 <pre class="language-javascript" data-src-loaded="" data-src="../resources/prism/prism.js"><code class="language-javascript">var dataToJSON = '{"name":"Surya Jasper","age":15,"netWorth":860.9,"gender":"M"}';
 var JSONtoObject = JSON.parse(dataToJSON);</code></pre>
 </section>
 <section id = "Get Requests">
 <h1 style = "text-align: center;">Get Requests</h1>
-<h3>Ahhh. One of the most satisfying things to do in JavaScript. Good ol' get requests. Now, Get Requests are ways of receiving data from APIs such as Google's dictionary API, Nutritionix's food API, or the FDA's food and drug API (which is actually open source and free to use. Yeah. That's concerning)</h3>
+<p class = "big">Ahhh. One of the most satisfying things to do in JavaScript. Good ol' get requests. Now, Get Requests are ways of receiving data from APIs such as Google's dictionary API, Nutritionix's food API, or the FDA's food and drug API (which is actually open source and free to use. Yeah. That's concerning)</p>
 <h2>Steps involved in making get requests</h2>
 <ol>
-<li><h3><b>Find an API and its documentation</b></h3></li>
-<h4>Let's take a look at <a href = "https://googledictionaryapi.eu-gb.mybluemix.net/">Google's dictionary API</a>'s documentation</h4>
-<h4>The link is https://googledictionaryapi.eu-gb.mybluemix.net/ and to find a definition, we append the query ?define=word&lang=en and we get https://googledictionaryapi.eu-gb.mybluemix.net/?define=word&lang=en which gives us the following JSON string:</h4>
+<li><p class = "big"><b>Find an API and its documentation</b></p></li>
+<p class = "medium">Let's take a look at <a href = "https://googledictionaryapi.eu-gb.mybluemix.net/">Google's dictionary API</a>'s documentation</p>
+<p class = "medium">The link is https://googledictionaryapi.eu-gb.mybluemix.net/ and to find a definition, we append the query ?define=word&lang=en and we get https://googledictionaryapi.eu-gb.mybluemix.net/?define=word&lang=en which gives us the following JSON string:</p>
 <pre class="language-js" data-src-loaded="" data-src="../resources/prism/prism.js"><code class="language-js">[
   {
     "word": "word",
@@ -337,7 +337,7 @@ var JSONtoObject = JSON.parse(dataToJSON);</code></pre>
   }
 ]
 </code></pre>
-<li><h3><b>Using this basic format</b></h3></li>
+<li><p class = "big"><b>Using this basic format</b></p></li>
 <pre class="language-js" data-src-loaded="" data-src="../resources/prism/prism.js"><code class="language-js">var request = new XMLHttpRequest();
 request.open('GET', /* Website including queries */ ,true);
 request.onload = function() {
@@ -349,7 +349,7 @@ request.onload = function() {
 }
 request.send();
 </code></pre>
-<li><h3><b>Writing the code with the JSON you tested prior as reference</b></h3></li>
+<li><p class = "big"><b>Writing the code with the JSON you tested prior as reference</b></p></li>
 <pre class="language-js" data-src-loaded="" data-src="../resources/prism/prism.js"><code class="language-js">function define(word) {
   var request = new XMLHttpRequest();
   request.open('GET','https://googledictionaryapi.eu-gb.mybluemix.net/?define='+word+'&lang=en',true);
@@ -380,7 +380,7 @@ function doneFindingDefinition(word, pos, definition) {
   // However, you can do all sorts of things such as work with HTML to add the definitions to the page
 }
 </code></pre>
-<h4>Just remember, if you have a function that contains the get request, NEVER RETURN ANYTHING. Always call another function to handle what you received from the API. Otherwise, the return statement will execute before the request even goes through</h4>
+<p class = "medium">Just remember, if you have a function that contains the get request, NEVER RETURN ANYTHING. Always call another function to handle what you received from the API. Otherwise, the return statement will execute before the request even goes through</p>
 </ol>
 </section>
     </div>

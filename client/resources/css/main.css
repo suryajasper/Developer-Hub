@@ -350,7 +350,7 @@ section a {
 }
 
 section a h1, h2, h3, h4, p {
-  margin-top: 2px;
+  margin-top: 6px;
   margin-bottom: 2px;
 }
 
@@ -363,4 +363,16 @@ section a h1, h2, h3, h4, p {
 
 .signup-block p {
   display: block;
+}
+
+.big {
+  font-size: 1.17em;
+}
+
+.medium {
+  font-size: 1em;
+}
+
+.small {
+
 }

@@ -1,0 +1,68 @@
+<html>
+  <head>
+    <title>Javascript tutorial</title>
+    <meta charset = "utf-8" name="viewport" content="width=device-width, initial-scale=1.0">
+    <script
+			  src="https://code.jquery.com/jquery-3.4.1.min.js"
+			  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+			  crossorigin="anonymous"></script>
+  </head>
+  <link rel="stylesheet" href="../resources/css/main.css">
+  <link rel="stylesheet" href="../resources/prism/prism.css">
+  <script src="/socket.io/socket.io.js"></script>
+  <script src = "../resources/prism/prism.js"></script>
+  <body>
+    <div class = "header-outer">
+      <header class = "header">
+        <img id = "sidebarshow" src = "../resources/images/sidebar.svg" style = "height: 53px; width: 53px;"></img>
+        <!--img width = "44" height = "36" class = "jbg-top-logo" alt = "jbg-top-logo" src = "images/jasperboxlarge.png"></img>
+        <img class = "jbg-top-logo" alt = "jbg-top-logo" src = "images/logo.svg"></img-->
+        <div id = "top-options" style = "display: none;" class = "centered-horizontal top-logo" alt = "top-logo">
+          Editing mode: <select style = "display: inline-block;" id = "editMode" value = "viewing">
+            <option value = "viewing">Viewing</option>
+            <option value = "editing">Editing</option>
+          </select><button style = "margin-left: 5px; display: inline-block;" id = "saveButton">Save</button>
+        </div>
+      </header>
+    </div>
+    <div id = "sidenav" class="sidenav">
+      <!--a style = "margin-top: 60px;" href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#clients">Clients</a>
+      <a href="#contact">Contact</a-->
+    </div>
+    <p id = "topic" style = "display: none;">Node</p>
+    <div class = "main" style = "margin-top: 50px;">
+<section id = "creating a project">
+<h1 style = "text-align: center;">Creating a Project</h1>
+<ol>
+  <li>Initializing the project</li>
+<pre class="language-shell-session" data-src-loaded="" data-src="../resources/prism/prism.js"><code class="language-shell-session">npm init</code></pre>
+  <p>This should then generate a package.json file that looks like this</p>
+<pre class="language-js" data-src-loaded="" data-src="../resources/prism/prism.js"><code class="language-js">{
+  "name": "project-name",
+  "version": "1.0.0",
+  "description": "Your project description",
+  "main": "app.js",
+  "devDependencies": {},
+  "scripts": {
+    "start": "node app.js"
+  },
+  "author": "Your Name",
+  "license": "ISC",
+  "dependencies": {
+  }
+}
+</code></pre>
+  <p>Obviously these values will be specific to your project based on the values you enter, and as you install dependencies, this file will automatically be updated</p>
+  <li>Installing dependencies</li>
+  <p>
+</section>
+    </div>
+  <script src="https://www.gstatic.com/firebasejs/7.9.3/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.9.3/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.9.3/firebase-database.js"></script>
+  <script src = "../resources/js/fireBase.js"></script>
+  <script src = "../resources/js/main.js"></script>
+  </body>
+</html>

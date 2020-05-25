@@ -117,7 +117,7 @@ function addNewSection() {
   legend.appendChild(legendHeader);
   legend.appendChild(legendInput);
   fieldset.appendChild(legend);
-  var newDropdown = dropdown('Add new element', ['<h2>heading 1</h2>', '<h3>heading 2</h3>', '<h4>heading 3</h4>', '<p>text</p>', 'link', 'code']);
+  var newDropdown = dropdown('Add new element', ['<h2>heading 1</h2>', '<p class = "big">heading 2</p>', '<p class = "medium">large text</p>', '<p>normal text</p>', '<p style = "color: blue;"><u>link<u></p>', '<code>code</code>']);
   var dropdiv = newDropdown.dd;
   var anchors = newDropdown.aa;
   console.log(anchors);
@@ -129,15 +129,15 @@ function addNewSection() {
     anchor.onclick = function(e) {
       e.preventDefault();
       var anchparams = {};
-      if (this.innerHTML === 'code') {
+      if (this.innerHTML === '<code>code</code>') {
         anchparams['code'] = document.createElement('textarea');
-      } else if (this.innerHTML === 'link') {
+      } else if (this.innerHTML === '<p style="color: blue;"><u>link<u></u></u></p>') {
         anchparams['name'] = document.createElement('input');
         anchparams['name'].type = 'text';
         anchparams['name'].style.display = 'inline-block';
         anchparams['link'] = document.createElement('input');
         anchparams['link'].type = 'text';
-      } else if (this.innerHTML === '<p>text</p>') {
+      } else if (this.innerHTML === '<p>normal text</p>') {
         anchparams['content'] = document.createElement('textarea');
       }
       else {
@@ -167,24 +167,25 @@ function addNewSection() {
     var stringToAppend = '';
 
     for (var i = 0; i < elementTypes.length; i++) {
-      var elementString;
+      var elementString = null;
+      console.log(elementTypes[i]);
       switch (elementTypes[i]) {
-        case 'code':
+        case '<code>code</code>':
           elementString = '<pre class="language-javascript" data-src-loaded="" data-src="../resources/prism/prism.js"><code class="language-javascript">' + elementParams[i]['code'].value + '</code></pre>';
           break;
         case '<h2>heading 1</h2>':
           elementString = '<h2>' + urlify(elementParams[i]['content'].value) + '</h2>';
           break;
-        case '<h3>heading 2</h3>':
-          elementString = '<h3>' + urlify(elementParams[i]['content'].value) + '</h3>';
+        case '<p class="big">heading 2</p>':
+          elementString = '<p class = "big">' + urlify(elementParams[i]['content'].value) + '</p>';
           break;
-        case '<h4>heading 3</h4>':
-          elementString = '<h4>' + urlify(elementParams[i]['content'].value) + '</h4>';
+        case '<p class="medium">large text</p>':
+          elementString = '<p class = "medium">' + urlify(elementParams[i]['content'].value) + '</p>';
           break;
-        case '<p>text</p>':
+        case '<p>normal text</p>':
           elementString = '<p>' + urlify(elementParams[i]['content'].value) + '</p>';
           break;
-        case 'link':
+        case '<p style="color: blue;"><u>link<u></u></u></p>':
           elementString = '<a href = "' + elementParams[i]['link'].value + '">' + elementParams[i]['name'].value + '</a>';
           break;
       }

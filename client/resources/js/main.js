@@ -20,22 +20,6 @@ var currentToReplace = null;
 
 initializeFirebase();
 
-firebase.auth().onAuthStateChanged(function(user) {
-  if (user) {
-    socket.emit('getSiteData', user.uid, topic);
-
-    document.getElementById('saveButton').onclick = function() {
-      socket.emit('changeSiteData', {userID: user.uid, topic: topic, content: main.innerHTML});
-    }
-
-    socket.on('updateSiteData', function(innerHTML) {
-      console.log(innerHTML);
-      main.innerHTML = innerHTML;
-      Prism.highlightAll();
-    })
-  }
-});
-
 sidebarshow.onclick = function() {
   if (sidenav.style.display === 'block') {
     sidenav.style.display = 'none';
@@ -208,6 +192,21 @@ firebase.auth().onAuthStateChanged(user => {
   if(user) {
     refreshHeadings(true);
     topBar.style.display = 'inline-block';
+
+    socket.emit('getSiteData', user.uid, topic);
+
+    document.getElementById('saveButton').onclick = function() {
+      if (editMode.value === 'editing') {
+        handleEditMode();
+      }
+      socket.emit('changeSiteData', {userID: user.uid, topic: topic, content: main.innerHTML});
+    }
+
+    socket.on('updateSiteData', function(innerHTML) {
+      console.log(innerHTML);
+      main.innerHTML = innerHTML;
+      Prism.highlightAll();
+    })
   }
 });
 

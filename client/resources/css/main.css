@@ -148,7 +148,11 @@ fieldset {
   -webkit-border-radius:8px;
   border-radius:8px;
 }
-textarea {
+textarea.ignoreCSS {
+  font-family: inherit;
+}
+
+textarea:not(.ignoreCSS) {
   width: 100%;
   max-width: 100%;
   resize: vertical;
@@ -159,21 +163,22 @@ textarea {
   border-radius: 4px;
   padding: 8px 13px;
 }
-textarea::-webkit-outer-spin-button,
-textarea::-webkit-inner-spin-button {
+textarea:not(.ignoreCSS)::-webkit-outer-spin-button,
+textarea:not(.ignoreCSS)::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
-textarea:focus {
+textarea:not(.ignoreCSS):focus {
   border: 3px solid #909090;
   -webkit-transition: 0.5s;
 }
-textarea:hover {
+textarea:not(.ignoreCSS):hover {
   background-color:#c4ccd9 ;
   border: 3px solid #979ea4 ;
   -webkit-transition: 0.5s;
 }
 input[type=text] {
+  margin-bottom: 8px;
   display: block;
   background-color:#414141;
   border: 2px solid #414141;
@@ -197,6 +202,7 @@ input[type=submit] {
 }
 
 input[type=number] {
+  margin-bottom: 8px;
   background-color:#414141;
   border: 2px solid #414141;
   border-radius: 4px;
@@ -371,8 +377,4 @@ section a h1, h2, h3, h4, p {
 
 .medium {
   font-size: 1em;
-}
-
-.small {
-
 }

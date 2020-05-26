@@ -61,7 +61,7 @@ function refreshHeadings(addAddButton) {
 
 refreshHeadings(false);
 
-function dropdown(name, values) {
+function dropdown(name, values, placeholders) {
   var dropdiv = document.createElement('div');
   dropdiv.classList.add('dropdown');
 
@@ -74,9 +74,12 @@ function dropdown(name, values) {
 
   var arrA = [];
 
-  for (var val of values) {
+  for (var i = 0; i < values.length; i++) {
     var a = document.createElement('a');
-    a.innerHTML = val;
+    a.innerHTML = values[i];
+    if (placeholders[i] !== null) {
+      a.id = placeholders[i];
+    }
     dropcnt.appendChild(a);
     arrA.push(a);
   }
@@ -122,7 +125,7 @@ function addNewSection() {
         anchparams['link'] = document.createElement('input');
         anchparams['link'].type = 'text';
       } else if (this.innerHTML === '<p>normal text</p>') {
-        anchparams['content'] = document.createElement('textarea');
+        anchparams['enter paragraph text'] = document.createElement('textarea');
       }
       else {
         anchparams['content'] = document.createElement('input');
@@ -130,7 +133,7 @@ function addNewSection() {
       }
       var type = this.innerHTML;
       for (var key of Object.keys(anchparams)) {
-        anchparams[key].setAttribute('placeholder', key);
+        anchparams[key].placeholder = key;
         fieldset.insertBefore(anchparams[key], dropdiv);
       }
       elementTypes.push(this.innerHTML);
@@ -237,12 +240,14 @@ function handleEditMode() {
               makeLastEditView();
             }
             currentEdit = this;
-            if (this.tagName === 'PRE') {
+            if (this.tagName === 'PRE' || this.tagName === 'P') {
               var input = document.createElement('textarea');
+              input.classList.add('ignoreCSS');
               input.style.display = this.style.display;
               input.style.width = "100%";
               var fontSize = parseFloat(window.getComputedStyle(this, null).getPropertyValue('font-size')).toString();
               input.style.fontSize = fontSize;
+              input.style.height = window.getComputedStyle(this, null).getPropertyValue('height')
               input.style.textAlign = this.style.textAlign;
               input.value = this.innerHTML;
               this.parentNode.replaceChild(input, this);

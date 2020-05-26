@@ -150,6 +150,8 @@ fieldset {
 }
 textarea.ignoreCSS {
   font-family: inherit;
+  color: white;
+  background-color: black;
 }
 
 textarea:not(.ignoreCSS) {

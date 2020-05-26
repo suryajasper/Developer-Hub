@@ -209,6 +209,7 @@ firebase.auth().onAuthStateChanged(user => {
       console.log(innerHTML);
       main.innerHTML = innerHTML;
       Prism.highlightAll();
+      handleEditMode();
     })
   }
 });
@@ -216,8 +217,12 @@ firebase.auth().onAuthStateChanged(user => {
 function makeLastEditView() {
   if (currentEdit !== null) {
     currentEdit.style.border = 'none';
-    currentEdit.innerHTML = currentToReplace.value;
-    currentToReplace.parentNode.replaceChild(currentEdit, currentToReplace);
+    if (currentToReplace !== null) {
+      currentEdit.innerHTML = currentToReplace.value;
+      console.log(currentToReplace);
+      if (currentToReplace.parentNode !== null)
+        currentToReplace.parentNode.replaceChild(currentEdit, currentToReplace);
+    }
   }
 }
 
@@ -257,6 +262,8 @@ function handleEditMode() {
             else {
               var input = document.createElement('input');
               input.style.display = this.style.display;
+              input.style.backgroundColor = "black";
+              input.style.color = "white";
               input.style.width = "100%";
               var fontSize = parseFloat(window.getComputedStyle(this, null).getPropertyValue('font-size')).toString();
               input.style.fontSize = fontSize;

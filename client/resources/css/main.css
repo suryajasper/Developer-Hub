@@ -329,6 +329,7 @@ input:focus {
   position: absolute;
   background-color: #f1f1f1;
   min-width: 160px;
+  max-width: 300px;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   z-index: 1;
 }
@@ -388,4 +389,22 @@ section a h1, h2, h3, h4, p {
   padding-left: 6px;
   background-color: rgb(78, 10, 115);
   color: white;
+}
+
+h2.listLegend {
+  text-align: center;
+  display: table;
+  width: 100%;
+}
+h2.listLegend > span, h2.listLegend:before, h2.listLegend:after {
+    display: table-cell;
+}
+h2.listLegend:before, h2.listLegend:after {
+    background: url(https://dummyimage.com/2x1/fff/fff&text=+) repeat-x center;
+    width: 50%;
+    content: ' ';
+}
+h2.listLegend > span {
+    white-space: nowrap;
+    padding: 0 9px;
 }

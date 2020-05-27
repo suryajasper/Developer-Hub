@@ -15,13 +15,20 @@
     <div class = "header-outer">
       <header class = "header">
         <img id = "sidebarshow" src = "../resources/images/sidebar.svg" style = "height: 53px; width: 53px;"></img>
-        <!--img width = "44" height = "36" class = "jbg-top-logo" alt = "jbg-top-logo" src = "images/jasperboxlarge.png"></img>
-        <img class = "jbg-top-logo" alt = "jbg-top-logo" src = "images/logo.svg"></img-->
         <div id = "top-options" style = "display: none;" class = "centered-horizontal top-logo" alt = "top-logo">
+          <div id = "topmenu" style = "display: inline-block; margin-right: 5px;">
+            <div id = "fileDropdown" class = "dropdown">
+              <button class = "dropbtn menubutton">file</button>
+              <div class = "dropdown-content">
+                <a id = "saveButton">Save</a>
+                <a id = "editButton">Edit</a>
+              </div>
+            </div>
+          </div>
           Editing mode: <select style = "display: inline-block;" id = "editMode" value = "viewing">
             <option value = "viewing">Viewing</option>
             <option value = "editing">Editing</option>
-          </select><button style = "margin-left: 5px; display: inline-block;" id = "saveButton">Save</button>
+          </select>
         </div>
       </header>
     </div>

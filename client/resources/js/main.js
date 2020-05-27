@@ -77,7 +77,7 @@ function dropdown(name, values, placeholders) {
   for (var i = 0; i < values.length; i++) {
     var a = document.createElement('a');
     a.innerHTML = values[i];
-    if (placeholders[i] !== null) {
+    if (placeholders!== null && placeholders[i] !== null) {
       a.id = placeholders[i];
     }
     dropcnt.appendChild(a);
@@ -104,7 +104,7 @@ function addNewSection() {
   legend.appendChild(legendHeader);
   legend.appendChild(legendInput);
   fieldset.appendChild(legend);
-  var newDropdown = dropdown('Add new element', ['<h2>heading 1</h2>', '<p class = "big">heading 2</p>', '<p class = "medium">large text</p>', '<p>normal text</p>', '<p style = "color: blue;"><u>link<u></p>', '<code>code</code>']);
+  var newDropdown = dropdown('Add new element', ['<h2>heading 1</h2>', '<p class = "big">heading 2</p>', '<p class = "medium">large text</p>', '<p>normal text</p>', '<p style = "color: blue;"><u>link<u></p>', '<code>code</code>'], ['Heading 1', 'Heading 2', 'Large text', 'Normal text', null, null]);
   var dropdiv = newDropdown.dd;
   var anchors = newDropdown.aa;
   console.log(anchors);
@@ -123,13 +123,12 @@ function addNewSection() {
         anchparams['name'].type = 'text';
         anchparams['name'].style.display = 'inline-block';
         anchparams['link'] = document.createElement('input');
+        anchparams['link'].style.display = 'inline-block';
         anchparams['link'].type = 'text';
-      } else if (this.innerHTML === '<p>normal text</p>') {
-        anchparams['enter paragraph text'] = document.createElement('textarea');
       }
       else {
-        anchparams['content'] = document.createElement('input');
-        anchparams['content'].type = "text";
+        anchparams[this.id] = document.createElement('input');
+        anchparams[this.id].type = "text";
       }
       var type = this.innerHTML;
       for (var key of Object.keys(anchparams)) {
@@ -183,6 +182,7 @@ function addNewSection() {
     section.innerHTML += stringToAppend;
     main.replaceChild(section, fieldset);
     Prism.highlightAll();
+    handleEditMode();
     refreshHeadings();
   };
 
@@ -198,8 +198,10 @@ firebase.auth().onAuthStateChanged(user => {
 
     socket.emit('getSiteData', user.uid, topic);
 
-    document.getElementById('saveButton').onclick = function() {
+    document.getElementById('saveButton').onclick = function(e) {
+      e.preventDefault();
       if (editMode.value === 'editing') {
+        reverseEditMode();
         handleEditMode();
       }
       socket.emit('changeSiteData', {userID: user.uid, topic: topic, content: main.innerHTML});
@@ -209,7 +211,6 @@ firebase.auth().onAuthStateChanged(user => {
       console.log(innerHTML);
       main.innerHTML = innerHTML;
       Prism.highlightAll();
-      handleEditMode();
     })
   }
 });
@@ -223,6 +224,14 @@ function makeLastEditView() {
       if (currentToReplace.parentNode !== null)
         currentToReplace.parentNode.replaceChild(currentEdit, currentToReplace);
     }
+  }
+}
+
+function reverseEditMode() {
+  if (editMode.value === 'editing') {
+    editMode.value = 'viewing';
+  } else {
+    editMode.value = 'editing';
   }
 }
 

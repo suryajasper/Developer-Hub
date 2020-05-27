@@ -18,6 +18,8 @@ var topic =document.getElementById('topic').innerHTML;
 var currentEdit = null;
 var currentToReplace = null;
 
+var lastInputSelect = null;
+
 initializeFirebase();
 
 sidebarshow.onclick = function() {
@@ -113,6 +115,8 @@ function addNewSection() {
   var elementParams = []; // arr of dicts
   var elementTypes = [];
 
+  var createdAList = false;
+
   for (var anchor of anchors) {
     anchor.onclick = function(e) {
       e.preventDefault();
@@ -129,30 +133,44 @@ function addNewSection() {
         anchparams['link'].style.display = 'inline-block';
         anchparams['link'].type = 'text';
       } else if (this.innerHTML === 'unordered list' || this.innerHTML === 'ordered list') {
+        if (createdAList) {
+          anchparams['l'] = document.createElement('h2');
+          anchparams['l'].classList.add('listLegend');
+          anchparams['l'].innerHTML = '<span>End of list</span>';
+        }
         anchparams['legend'] = document.createElement('h2');
         anchparams['legend'].classList.add('listLegend');
         anchparams['legend'].innerHTML = '<span>Start of new ' + this.innerHTML + '</span>';
+        createdAList = true;
       } else if (this.innerHTML === 'end list') {
-        anchparams['legend'] = document.createElement('h2');
-        anchparams['legend'].classList.add('listLegend');
-        anchparams['legend'].innerHTML = '<span>End of list</span>';
+        if (createdAList) {
+          createdAList = false;
+          anchparams['legend'] = document.createElement('h2');
+          anchparams['legend'].classList.add('listLegend');
+          anchparams['legend'].innerHTML = '<span>End of list</span>';
+        }
       } else {
         anchparams['content'] = document.createElement('input');
         anchparams['content'].type = "text";
       }
       var type = this.innerHTML;
       for (var key of Object.keys(anchparams)) {
-        if (this.innerHTML !== 'unordered list' && this.innerHTML !== 'ordered list') {
+        if (this.innerHTML !== 'unordered list' && this.innerHTML !== 'ordered list' && this.innerHTML !== 'end list') {
           if (this.id !== "" && this.id !== null) {
             anchparams[key].placeholder = this.id;
           } else {
             anchparams[key].placeholder = 'content';
           }
+          anchparams['actual'] = anchparams[key];
         }
         fieldset.insertBefore(anchparams[key], dropdiv);
       }
-      elementTypes.push(this.innerHTML);
+      if ('l' in anchparams) {
+        elementParams.push(anchparams);
+        elementTypes.push('end list');
+      }
       elementParams.push(anchparams);
+      elementTypes.push(this.innerHTML);
     }
   }
 
@@ -209,11 +227,16 @@ function addNewSection() {
             elementString = '</ul>';
           startedParsingOrderedList = false;
           startedParsingUnorderedList = false;
-          break;
       }
       console.log(elementString);
+      console.log(startedParsingOrderedList);
       if ((startedParsingOrderedList && elementString !== '<ol>') || (startedParsingUnorderedList && elementString !== '<ul>')) {
-        elementString = '<li>' + elementString + '</li>';
+        console.log(elementParams[i]['actual']);
+        if (elementParams[i]['actual'].classList.contains('noIncludeInList')) {
+          elementString = elementString;
+        } else {
+          elementString = '<li>' + elementString + '</li>';
+        }
       }
       stringToAppend += elementString;
     }
@@ -222,7 +245,7 @@ function addNewSection() {
     main.replaceChild(section, fieldset);
     Prism.highlightAll();
     handleEditMode();
-    refreshHeadings();
+    refreshHeadings(true);
   };
 
   fieldset.appendChild(dropdiv);
@@ -345,4 +368,17 @@ handleEditMode();
 
 editMode.oninput = function() {
   handleEditMode();
+}
+
+document.getElementById('noInList').onclick = function(e) {
+  e.preventDefault();
+  console.log(document.activeElement);
+  if (document.activeElement.tagName.toUpperCase() === 'INPUT') {
+    if (document.activeElement.classList.contains('noIncludeInList')) {
+      document.activeElement.classList.remove('noIncludeInList')
+    } else {
+      document.activeElement.classList.add('noIncludeInList')
+    }
+    console.log(document.activeElement.classList);
+  }
 }

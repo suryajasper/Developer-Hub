@@ -60,7 +60,7 @@ body {
   height: 50px;
   margin: 10px;
   cursor: pointer;
-  background-color: black;
+  background-color: rgb(38, 64, 36);
   border-width: 0px;
   border-radius: 6px;
   color: white;
@@ -161,6 +161,30 @@ textarea:not(.ignoreCSS) {
   border-radius: 4px;
   padding: 8px 13px;
 }
+textarea.contentInCSS {
+  background-color: rgb(47, 47, 47);
+  border-radius: 0px;
+  border: 1px solid white;
+  width: 100%;
+}
+textarea.contentInCSS:focus {
+  outline: none;
+}
+/*
+.contentInCSS {
+  width: 500px;
+  height: 300px;
+  padding: 10px;
+  background-color: #444;
+  color: white;
+  font-size: 14px;
+  font-family: monospace;
+}
+.statement {
+  color: orange;
+}
+*/
+
 textarea:not(.ignoreCSS)::-webkit-outer-spin-button,
 textarea:not(.ignoreCSS)::-webkit-inner-spin-button {
   -webkit-appearance: none;

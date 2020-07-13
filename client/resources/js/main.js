@@ -91,7 +91,7 @@ function dropdown(name, values, placeholders) {
   return {dd: dropdiv, aa: arrA};
 }
 
-function addNewSection() {
+/*function addNewSection() {
   var sectDiv = document.createElement('div');
 
   var fieldset = document.createElement('fieldset');
@@ -250,6 +250,57 @@ function addNewSection() {
 
   fieldset.appendChild(dropdiv);
   fieldset.appendChild(createSection);
+  main.appendChild(fieldset);
+}*/
+
+function addNewSection() {
+  var fieldset = document.createElement('fieldset');
+  fieldset.style.marginBottom = '350px';
+  var legend = document.createElement('legend');
+  var legendHeader = document.createElement('h1');
+  legendHeader.style.display = "inline-block";
+  legendHeader.style.marginRight = "10px";
+  legendHeader.innerHTML = 'Section title: ';
+  var legendInput = document.createElement('input');
+  legendInput.style.display = "inline-block";
+  legendInput.setAttribute('type', 'text');
+  legend.appendChild(legendHeader);
+  legend.appendChild(legendInput);
+  fieldset.appendChild(legend);
+
+  var contentIn = document.createElement('textarea');
+  contentIn.classList.add('ignoreCSS');
+  contentIn.classList.add('contentInCSS');
+  contentIn.contentEditable = true;
+  /*var keywords = ["SELECT","FROM","WHERE","LIKE","BETWEEN","NOT LIKE","FALSE","NULL","FROM","TRUE","NOT IN"];
+  contentIn.onkeyup = function(e){
+    // Space key pressed
+    if (e.keyCode == 32){
+      var newHTML = "";
+      // Loop through words
+      console.log($(this).text().replace(/[\s]+/g, " "));
+      $(this).text().replace(/[\s]+/g, " ").trim().split(" ").forEach(function(val){
+        // If word is statement
+        if (keywords.indexOf(val.trim().toUpperCase()) > -1)
+          newHTML += "<span class='statement'>" + val + "&nbsp;</span>";
+        else
+          newHTML += "<span class='other'>" + val + "&nbsp;</span>";
+      });
+      $(this).html(newHTML);
+
+      // Set cursor postion to end of text
+      var child = $(this).children();
+      var range = document.createRange();
+      var sel = window.getSelection();
+      range.setStart(child[child.length-1], 1);
+      range.collapse(true);
+      sel.removeAllRanges();
+      sel.addRange(range);
+      this.focus();
+    }
+  };*/
+  fieldset.appendChild(contentIn);
+
   main.appendChild(fieldset);
 }
 

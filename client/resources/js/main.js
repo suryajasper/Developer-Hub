@@ -17,6 +17,7 @@ var topic =document.getElementById('topic').innerHTML;
 
 var currentEdit = null;
 var currentToReplace = null;
+var currentEditCodeTag = null;
 
 var lastInputSelect = null;
 
@@ -90,168 +91,6 @@ function dropdown(name, values, placeholders) {
   dropdiv.appendChild(dropcnt);
   return {dd: dropdiv, aa: arrA};
 }
-
-/*function addNewSection() {
-  var sectDiv = document.createElement('div');
-
-  var fieldset = document.createElement('fieldset');
-  fieldset.style.marginBottom = '350px';
-  var legend = document.createElement('legend');
-  var legendHeader = document.createElement('h1');
-  legendHeader.style.display = "inline-block";
-  legendHeader.style.marginRight = "10px";
-  legendHeader.innerHTML = 'Section title: ';
-  var legendInput = document.createElement('input');
-  legendInput.style.display = "inline-block";
-  legendInput.setAttribute('type', 'text');
-  legend.appendChild(legendHeader);
-  legend.appendChild(legendInput);
-  fieldset.appendChild(legend);
-  var newDropdown = dropdown('Add new element', ['<h2>heading 1</h2>', '<p class = "big">heading 2</p>', '<p class = "medium">large text</p>', '<p>normal text</p>', '<p style = "color: blue;"><u>link<u></p>', '<code>code</code>', 'unordered list', 'ordered list', 'end list'], ['Heading 1', 'Heading 2', 'Large text', 'Normal text', null, null, null, null, null]);
-  var dropdiv = newDropdown.dd;
-  var anchors = newDropdown.aa;
-  console.log(anchors);
-
-  var elementParams = []; // arr of dicts
-  var elementTypes = [];
-
-  var createdAList = false;
-
-  for (var anchor of anchors) {
-    anchor.onclick = function(e) {
-      e.preventDefault();
-      var anchparams = {};
-      if (this.innerHTML === '<code>code</code>') {
-        anchparams['code'] = document.createElement('textarea');
-      } else if (this.innerHTML === '<p>normal text</p>') {
-        anchparams['content'] = document.createElement('textarea');
-      } else if (this.innerHTML === '<p style="color: blue;"><u>link<u></u></u></p>') {
-        anchparams['name'] = document.createElement('input');
-        anchparams['name'].type = 'text';
-        anchparams['name'].style.display = 'inline-block';
-        anchparams['link'] = document.createElement('input');
-        anchparams['link'].style.display = 'inline-block';
-        anchparams['link'].type = 'text';
-      } else if (this.innerHTML === 'unordered list' || this.innerHTML === 'ordered list') {
-        if (createdAList) {
-          anchparams['l'] = document.createElement('h2');
-          anchparams['l'].classList.add('listLegend');
-          anchparams['l'].innerHTML = '<span>End of list</span>';
-        }
-        anchparams['legend'] = document.createElement('h2');
-        anchparams['legend'].classList.add('listLegend');
-        anchparams['legend'].innerHTML = '<span>Start of new ' + this.innerHTML + '</span>';
-        createdAList = true;
-      } else if (this.innerHTML === 'end list') {
-        if (createdAList) {
-          createdAList = false;
-          anchparams['legend'] = document.createElement('h2');
-          anchparams['legend'].classList.add('listLegend');
-          anchparams['legend'].innerHTML = '<span>End of list</span>';
-        }
-      } else {
-        anchparams['content'] = document.createElement('input');
-        anchparams['content'].type = "text";
-      }
-      var type = this.innerHTML;
-      for (var key of Object.keys(anchparams)) {
-        if (this.innerHTML !== 'unordered list' && this.innerHTML !== 'ordered list' && this.innerHTML !== 'end list') {
-          if (this.id !== "" && this.id !== null) {
-            anchparams[key].placeholder = this.id;
-          } else {
-            anchparams[key].placeholder = 'content';
-          }
-          anchparams['actual'] = anchparams[key];
-        }
-        fieldset.insertBefore(anchparams[key], dropdiv);
-      }
-      if ('l' in anchparams) {
-        elementParams.push(anchparams);
-        elementTypes.push('end list');
-      }
-      elementParams.push(anchparams);
-      elementTypes.push(this.innerHTML);
-    }
-  }
-
-  var createSection = document.createElement('button');
-  createSection.innerHTML = 'Create Section';
-  createSection.onclick = function() {
-    var section = document.createElement('section');
-    section.id = legendInput.value;
-    var h1LegendHeader = document.createElement('h1');
-    h1LegendHeader.innerHTML = legendInput.value;
-    h1LegendHeader.style.textAlign = 'center';
-    section.appendChild(h1LegendHeader);
-
-    var stringToAppend = '';
-
-    var startedParsingOrderedList = false;
-    var startedParsingUnorderedList = false;
-
-    for (var i = 0; i < elementTypes.length; i++) {
-      var elementString = null;
-      console.log(elementTypes[i]);
-      console.log(elementParams[i]);
-      switch (elementTypes[i]) {
-        case '<code>code</code>':
-          elementString = '<pre class="language-javascript" data-src-loaded="" data-src="../resources/prism/prism.js"><code class="language-javascript">' + elementParams[i]['code'].value + '</code></pre>';
-          break;
-        case '<h2>heading 1</h2>':
-          elementString = '<h2>' + urlify(elementParams[i]['content'].value) + '</h2>';
-          break;
-        case '<p class="big">heading 2</p>':
-          elementString = '<p class = "big">' + urlify(elementParams[i]['content'].value) + '</p>';
-          break;
-        case '<p class="medium">large text</p>':
-          elementString = '<p class = "medium">' + urlify(elementParams[i]['content'].value) + '</p>';
-          break;
-        case '<p>normal text</p>':
-          elementString = '<p>' + urlify(elementParams[i]['content'].value) + '</p>';
-          break;
-        case '<p style="color: blue;"><u>link<u></u></u></p>':
-          elementString = '<a href = "' + elementParams[i]['link'].value + '">' + elementParams[i]['name'].value + '</a>';
-          break;
-        case 'unordered list':
-          elementString = '<ul>';
-          startedParsingUnorderedList = true;
-          break;
-        case 'ordered list':
-          elementString = '<ol>';
-          startedParsingOrderedList = true;
-          break;
-        case 'end list':
-          if (startedParsingOrderedList)
-            elementString = '</ol>';
-          else if (startedParsingUnorderedList)
-            elementString = '</ul>';
-          startedParsingOrderedList = false;
-          startedParsingUnorderedList = false;
-      }
-      console.log(elementString);
-      console.log(startedParsingOrderedList);
-      if ((startedParsingOrderedList && elementString !== '<ol>') || (startedParsingUnorderedList && elementString !== '<ul>')) {
-        console.log(elementParams[i]['actual']);
-        if (elementParams[i]['actual'].classList.contains('noIncludeInList')) {
-          elementString = elementString;
-        } else {
-          elementString = '<li>' + elementString + '</li>';
-        }
-      }
-      stringToAppend += elementString;
-    }
-
-    section.innerHTML += stringToAppend;
-    main.replaceChild(section, fieldset);
-    Prism.highlightAll();
-    handleEditMode();
-    refreshHeadings(true);
-  };
-
-  fieldset.appendChild(dropdiv);
-  fieldset.appendChild(createSection);
-  main.appendChild(fieldset);
-}*/
 
 function addNewSection() {
   var fieldset = document.createElement('fieldset');
@@ -389,6 +228,7 @@ firebase.auth().onAuthStateChanged(user => {
       console.log(innerHTML);
       main.innerHTML = innerHTML;
       Prism.highlightAll();
+      refreshHeadings(true);
     })
   }
 });
@@ -397,10 +237,16 @@ function makeLastEditView() {
   if (currentEdit !== null) {
     currentEdit.style.border = 'none';
     if (currentToReplace !== null) {
-      currentEdit.innerHTML = currentToReplace.value;
+      if (currentEdit.tagName === 'PRE') {
+        currentEdit.innerHTML = '<code class = "' + currentEditCodeTag + '">' + currentToReplace.value + '</code>';
+      } else {
+        currentEdit.innerHTML = currentToReplace.value;
+      }
       console.log(currentToReplace);
       if (currentToReplace.parentNode !== null)
         currentToReplace.parentNode.replaceChild(currentEdit, currentToReplace);
+      Prism.highlightAll();
+      console.log('highlight');
     }
   }
 }
@@ -433,6 +279,7 @@ function handleEditMode() {
             }
             currentEdit = this;
             if (this.tagName === 'PRE' || this.tagName === 'P') {
+              currentEditCodeTag = this.firstChild.className;
               var input = document.createElement('textarea');
               input.classList.add('ignoreCSS');
               input.style.display = this.style.display;

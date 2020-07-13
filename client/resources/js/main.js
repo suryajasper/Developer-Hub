@@ -255,7 +255,7 @@ function dropdown(name, values, placeholders) {
 
 function addNewSection() {
   var fieldset = document.createElement('fieldset');
-  fieldset.style.marginBottom = '350px';
+  fieldset.style.marginBottom = '90px';
   var legend = document.createElement('legend');
   var legendHeader = document.createElement('h1');
   legendHeader.style.display = "inline-block";
@@ -271,7 +271,7 @@ function addNewSection() {
   var contentIn = document.createElement('textarea');
   contentIn.classList.add('ignoreCSS');
   contentIn.classList.add('contentInCSS');
-  contentIn.contentEditable = true;
+  //contentIn.contentEditable = true;
   /*var keywords = ["SELECT","FROM","WHERE","LIKE","BETWEEN","NOT LIKE","FALSE","NULL","FROM","TRUE","NOT IN"];
   contentIn.onkeyup = function(e){
     // Space key pressed
@@ -299,9 +299,58 @@ function addNewSection() {
       this.focus();
     }
   };*/
-  fieldset.appendChild(contentIn);
 
   main.appendChild(fieldset);
+
+  var createButton = document.createElement('button');
+  createButton.innerHTML = 'Add Section';
+  createButton.onclick = function(e) {
+    e.preventDefault();
+    var content = contentIn.value.split('\n');
+    var sectDiv = document.createElement('section');
+    sectDiv.id = legendInput.value;
+
+    var h1 = document.createElement('h1');
+    h1.innerHTML = legendInput.value;
+    h1.style.textAlign = 'center';
+    sectDiv.appendChild(h1);
+
+    var inCodeBlock = false;
+    var codeBlock = '';
+    for (var line of content) {
+      var toCreate;
+      if (!inCodeBlock) {
+        if (line.substring(0,2) === '##') {
+          toCreate = document.createElement('h3');
+          toCreate.innerHTML = line.substring(2);
+        } else if (line.substring(0,1) === '#') {
+          toCreate = document.createElement('h2');
+          toCreate.innerHTML = line.substring(1);
+        } else if (line.includes('```')) {
+          inCodeBlock = true;
+          continue;
+        } else {
+          toCreate = document.createElement('p');
+          toCreate.innerHTML = line;
+        }
+        sectDiv.appendChild(toCreate);
+      } else {
+        if (line.includes('```')) {
+          inCodeBlock = false;
+          var code = '<pre class="language-javascript" data-src-loaded="" data-src="../resources/prism/prism.js"><code class="language-javascript">' + codeBlock.substring(0, codeBlock.length-1) + '</code></pre>'
+          sectDiv.appendChild((new DOMParser()).parseFromString(code, "text/xml").firstChild);
+        } else {
+          codeBlock += line + '\n';
+        }
+      }
+    }
+    main.replaceChild(sectDiv, fieldset);
+    Prism.highlightAll();
+    refreshHeadings(true);
+  }
+
+  fieldset.appendChild(contentIn);
+  fieldset.appendChild(createButton);
 }
 
 firebase.auth().onAuthStateChanged(user => {

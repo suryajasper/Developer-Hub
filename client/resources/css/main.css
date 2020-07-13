@@ -269,6 +269,7 @@ input::-webkit-inner-spin-button {
 }
 
 button {
+  margin-right: 5px;
   margin-top: 10;
   background-color:#414141;
   border: none;

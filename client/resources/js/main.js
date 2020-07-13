@@ -304,6 +304,7 @@ function addNewSection() {
 
   var createButton = document.createElement('button');
   createButton.innerHTML = 'Add Section';
+  createButton.style.display = 'inline-block';
   createButton.onclick = function(e) {
     e.preventDefault();
     var content = contentIn.value.split('\n');
@@ -316,6 +317,7 @@ function addNewSection() {
     sectDiv.appendChild(h1);
 
     var inCodeBlock = false;
+    var language = 'javascript';
     var codeBlock = '';
     for (var line of content) {
       var toCreate;
@@ -328,6 +330,11 @@ function addNewSection() {
           toCreate.innerHTML = line.substring(1);
         } else if (line.includes('```')) {
           inCodeBlock = true;
+          if (line.replaceAll(' ', '').length > 3) {
+            language = line.replaceAll(' ', '').substring(3, line.replaceAll(' ', '').length).toLowerCase();
+          } else {
+            language = 'javascript';
+          }
           continue;
         } else {
           toCreate = document.createElement('p');
@@ -337,8 +344,9 @@ function addNewSection() {
       } else {
         if (line.includes('```')) {
           inCodeBlock = false;
-          var code = '<pre class="language-javascript" data-src-loaded="" data-src="../resources/prism/prism.js"><code class="language-javascript">' + codeBlock.substring(0, codeBlock.length-1) + '</code></pre>'
-          sectDiv.appendChild((new DOMParser()).parseFromString(code, "text/xml").firstChild);
+          var code = '<pre class="language-' + language + '" data-src-loaded="" data-src="../resources/prism/prism.js"><code class="language-' + language + '">' + codeBlock.substring(0, codeBlock.length-1) + '</code></pre>'
+          sectDiv.innerHTML += code;
+          codeBlock = '';
         } else {
           codeBlock += line + '\n';
         }
@@ -349,8 +357,16 @@ function addNewSection() {
     refreshHeadings(true);
   }
 
+  var cancelButton = document.createElement('button');
+  cancelButton.innerHTML = 'Cancel';
+  cancelButton.style.display = 'inline-block';
+  cancelButton.onclick = function(e) {
+    fieldset.remove();
+  }
+
   fieldset.appendChild(contentIn);
   fieldset.appendChild(createButton);
+  fieldset.appendChild(cancelButton);
 }
 
 firebase.auth().onAuthStateChanged(user => {

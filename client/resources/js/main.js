@@ -158,15 +158,41 @@ function addNewSection() {
     var inCodeBlock = false;
     var language = 'javascript';
     var codeBlock = '';
+
+    var listElements = [];
+    var listIsOrdered = false;
+
     for (var line of content) {
       var toCreate;
       if (!inCodeBlock) {
+        if (listElements.length > 0 && (listIsOrdered && !(!isNaN(line.substring(0, 1)) && line.substring(1, 3) === '. ')) || (!listIsOrdered && line.substring(1, 2) !== '- ')) {
+          var parent = listIsOrdered ? document.createElement('ol') : document.createElement('ul');
+          for (var listElement of listElements) {
+            var li = document.createElement('li');
+            li.innerHTML = listElement;
+            parent.appendChild(li);
+          }
+          sectDiv.appendChild(parent);
+          listElements = [];
+        }
+
         if (line.substring(0,2) === '##') {
           toCreate = document.createElement('h3');
           toCreate.innerHTML = line.substring(2);
         } else if (line.substring(0,1) === '#') {
           toCreate = document.createElement('h2');
           toCreate.innerHTML = line.substring(1);
+        } else if (!isNaN(line.substring(0, 1)) && line.substring(1, 3) === '. ') {
+          if (listElements.length > 0 || line.substring(0, 1) === '1') {
+            listElements.push(line.substring(3));
+            listIsOrdered = true;
+          } else {
+            toCreate = document.createElement('p');
+            toCreate.innerHTML = line;
+          }
+        } else if (line.substring(0, 2) === '- ') {
+          listElements.push(line.substring(2));
+          listIsOrdered = false;
         } else if (line.includes('```')) {
           inCodeBlock = true;
           if (line.replaceAll(' ', '').length > 3) {
@@ -179,7 +205,8 @@ function addNewSection() {
           toCreate = document.createElement('p');
           toCreate.innerHTML = line;
         }
-        sectDiv.appendChild(toCreate);
+        if (toCreate !== undefined)
+          sectDiv.appendChild(toCreate);
       } else {
         if (line.includes('```')) {
           inCodeBlock = false;

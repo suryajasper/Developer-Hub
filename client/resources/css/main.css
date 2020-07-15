@@ -425,14 +425,58 @@ h2.listLegend {
   width: 100%;
 }
 h2.listLegend > span, h2.listLegend:before, h2.listLegend:after {
-    display: table-cell;
+  display: table-cell;
 }
 h2.listLegend:before, h2.listLegend:after {
-    background: url(https://dummyimage.com/2x1/fff/fff&text=+) repeat-x center;
-    width: 50%;
-    content: ' ';
+  background: url(https://dummyimage.com/2x1/fff/fff&text=+) repeat-x center;
+  width: 50%;
+  content: ' ';
 }
 h2.listLegend > span {
-    white-space: nowrap;
-    padding: 0 9px;
+  white-space: nowrap;
+  padding: 0 9px;
+}
+
+.menu {
+  width: 120px;
+  z-index: 1;
+  box-shadow: 0 4px 5px 3px rgba(0, 0, 0, 0.2);
+  position: fixed;
+  display: none;
+  transition: 0.2s display ease-in;
+}
+.menu .menu-options {
+  list-style: none;
+  padding: 10px 0;
+  z-index: 1;
+}
+.menu .menu-options .menu-option {
+  font-weight: 500;
+  z-index: 1;
+  font-size: 14px;
+  padding: 10px 40px 10px 20px;
+  cursor: pointer;
+}
+.menu .menu-options .menu-option:hover {
+  background: rgba(0, 0, 0, 0.2);
+}
+button .next {
+  color: green;
+}
+button[disabled="false"]:hover .next {
+  color: red;
+  animation: move 0.5s;
+  animation-iteration-count: 2;
+}
+
+@keyframes move {
+  from {
+    transform: translate(0%);
+  }
+  50% {
+    transform: translate(-40%);
+  }
+  to {
+    transform: transform(0%);
+  }
 }

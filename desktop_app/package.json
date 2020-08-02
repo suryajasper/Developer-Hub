@@ -1,0 +1,20 @@
+{
+  "name": "web-tutorial",
+  "version": "1.0.0",
+  "description": "A project intended to teach you the minimum amount of web development necessary to make your own websites",
+  "main": "app.js",
+  "devDependencies": {
+    "electron": "^9.1.2"
+  },
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "Surya Jasper",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "firebase-admin": "^8.12.1",
+    "socket.io": "^2.3.0",
+    "sortablejs": "^1.10.2"
+  }
+}

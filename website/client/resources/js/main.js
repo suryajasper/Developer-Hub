@@ -34,7 +34,19 @@ sidebarshow.onclick = function() {
     main.style.marginLeft = '160px';
   }
 }
-
+function CopyToClipboard(containerid) {
+  if (document.selection) {
+    var range = document.body.createTextRange();
+    range.moveToElementText(document.getElementById(containerid));
+    range.select().createTextRange();
+    document.execCommand("copy");
+  } else if (window.getSelection) {
+    var range = document.createRange();
+    range.selectNode(document.getElementById(containerid));
+    window.getSelection().addRange(range);
+    document.execCommand("copy");
+  }
+}
 function createNewDivAnchor() {
   var newDiv = document.createElement('a');
   newDiv.innerHTML = '+';
@@ -218,6 +230,16 @@ function addNewSection() {
         }
       }
     }
+    if (listElements.length > 0) {
+      var parent = listIsOrdered ? document.createElement('ol') : document.createElement('ul');
+      for (var listElement of listElements) {
+        var li = document.createElement('li');
+        li.innerHTML = listElement;
+        parent.appendChild(li);
+      }
+      sectDiv.appendChild(parent);
+      listElements = [];
+    }
     main.replaceChild(sectDiv, fieldset);
     Prism.highlightAll();
     refreshHeadings(true);
@@ -315,7 +337,7 @@ function handleEditMode() {
               input.style.fontSize = fontSize;
               input.style.height = window.getComputedStyle(this, null).getPropertyValue('height')
               input.style.textAlign = this.style.textAlign;
-              input.value = this.innerHTML;
+              input.value = this.textContent;
               this.parentNode.replaceChild(input, this);
               input.focus();
               currentToReplace = input;
@@ -358,17 +380,4 @@ handleEditMode();
 
 editMode.oninput = function() {
   handleEditMode();
-}
-
-document.getElementById('noInList').onclick = function(e) {
-  e.preventDefault();
-  console.log(document.activeElement);
-  if (document.activeElement.tagName.toUpperCase() === 'INPUT') {
-    if (document.activeElement.classList.contains('noIncludeInList')) {
-      document.activeElement.classList.remove('noIncludeInList')
-    } else {
-      document.activeElement.classList.add('noIncludeInList')
-    }
-    console.log(document.activeElement.classList);
-  }
 }

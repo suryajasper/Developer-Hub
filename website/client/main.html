@@ -13,13 +13,15 @@
     <div class ="center-outside">
       <div class = "header-outer">
         <header class = "header">
-          <!--img width = "44" height = "36" class = "jbg-top-logo" alt = "jbg-top-logo" src = "images/jasperboxlarge.png"></img>
+          <button class = "new_page_ref" id = "newPageButton">New +</button>
+          <!--img width = "44" height = "36" class = "jbg-top-loago" alt = "jbg-top-logo" src = "images/jasperboxlarge.png"></img>
           <img class = "jbg-top-logo" alt = "jbg-top-logo" src = "images/logo.svg"></img-->
         </header>
       </div>
     </div>
-    <div class = "centered">
-      <h1>Welcome to your html, css, js, node.js, and socket.io tutorial</h1>
+    <div style = "margin-top: 55px;">
+      <h1 style = "text-align: center;">Gallery</h1>
+      <h2>Prototypes by Surya Jasper</h2>
       <table>
         <tbody>
           <tr>
@@ -28,10 +30,29 @@
             <button onclick = "window.location.href='css/index.html'" class = "languageSelection">CSS</button>
             <button onclick = "window.location.href='node/index.html'" class = "languageSelection">NODE.JS</button>
             <button onclick = "window.location.href='socket/index.html'" class = "languageSelection">SOCKET.IO</button>
-            <button onclick = "newSection()" class = "languageSelection">+</button>
           </tr>
         </tbody>
       </table>
+      <div id = "newPageForm" class = "centered" style = "display: none;">
+        <form class = "prettyForm">
+          Name of Page<input type = "text" id = "pageName" ></input><br>
+          Make Public<input type = "checkbox" id = "isPublic" checked = "true"></input><br>
+          <div class = "center-outside">
+            <div class = "center-div" style = "margin-top: 0px;">
+              <input class = "formatLikeButton" type = "submit" style = "display: inline-block; border: none; margin-right: 5px;" id = "createPage" value = "Create"></input>
+              <button style = "display: inline-block;" id = "cancelPage">Cancel</button>
+            </div>
+          </div>
+        </form>
+      </div>
     </div>
+    <script>
+      document.getElementById('newPageButton').onclick = function() {
+        document.getElementById('newPageForm').style.display = 'block';
+      }
+      document.getElementById('cancelPage').onclick = function() {
+        document.getElementById('newPageForm').style.display = 'block';
+      }
+    </script>
   </body>
 </html>

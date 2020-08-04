@@ -17,6 +17,7 @@ admin.initializeApp({
 var database = admin.database();
 
 var refSiteData = database.ref("siteData");
+var gallery = database.ref("gallery");
 
 io.on('connection', function(socket){
   socket.on('changeSiteData', function(data) {

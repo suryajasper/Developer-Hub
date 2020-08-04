@@ -268,7 +268,7 @@ input::-webkit-inner-spin-button {
   margin: 0;
 }
 
-button {
+button, .new_page_ref, .formatLikeButton {
   margin-right: 5px;
   margin-top: 10;
   background-color:#414141;
@@ -279,7 +279,7 @@ button {
   cursor: pointer;
   display: block;
 }
-button:hover {
+button:hover, .formatLikeButton:hover {
   background-color: rgb(175, 178, 232);
 }
 
@@ -479,4 +479,17 @@ button[disabled="false"]:hover .next {
   to {
     transform: transform(0%);
   }
+}
+.new_page_ref {
+  color: white;
+  text-decoration: none;
+  float: right;
+  margin-top: 5px;
+  background-color: rgb(83, 135, 62);
+}
+.prettyForm {
+  background-color: rgb(102, 102, 102);
+  padding: 20px;
+  border-radius: 5px;
+  font-size: 1.25em;
 }

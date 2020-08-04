@@ -13,7 +13,7 @@ var sidebarshow = document.getElementById('sidebarshow');
 var main = document.getElementsByClassName('main')[0];
 var topBar = document.getElementById('top-options');
 var editMode = document.getElementById('editMode');
-var topic =document.getElementById('topic').innerHTML;
+var topic = document.getElementById('topic') === null ? null: document.getElementById('topic').innerHTML;
 
 var currentEdit = null;
 var currentToReplace = null;
@@ -262,15 +262,17 @@ firebase.auth().onAuthStateChanged(user => {
     refreshHeadings(true);
     topBar.style.display = 'inline-block';
 
-    socket.emit('getSiteData', user.uid, topic);
+    if (topic !== null) {
+      socket.emit('getSiteData', user.uid, topic);
 
-    document.getElementById('saveButton').onclick = function(e) {
-      e.preventDefault();
-      if (editMode.value === 'editing') {
-        reverseEditMode();
-        handleEditMode();
+      document.getElementById('saveButton').onclick = function(e) {
+        e.preventDefault();
+        if (editMode.value === 'editing') {
+          reverseEditMode();
+          handleEditMode();
+        }
+        socket.emit('changeSiteData', {userID: user.uid, topic: topic, content: main.innerHTML});
       }
-      socket.emit('changeSiteData', {userID: user.uid, topic: topic, content: main.innerHTML});
     }
 
     socket.on('updateSiteData', function(innerHTML) {

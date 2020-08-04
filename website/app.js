@@ -37,6 +37,14 @@ io.on('connection', function(socket){
       }
     })
   })
+  socket.on('newPageToGallery', function(pageName, isPublic, anyoneCanEdit, userID) {
+    gallery.child('pageName').set({authorID: userID, isPublic: isPublic, anyoneCanEdit: anyoneCanEdit});
+  })
+  socket.on('isUserValid', function(userID, pageName) {
+    gallery.child('pageName').once('value', function(snapshot) {
+      socket.emit('userValidResults', snapshot.val().authorID === userID);
+    })
+  })
 })
 
 http.listen(port, function(){

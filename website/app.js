@@ -18,6 +18,7 @@ var database = admin.database();
 
 var refSiteData = database.ref("siteData");
 var gallery = database.ref("gallery");
+var userInfo = database.ref('userInfo');
 
 io.on('connection', function(socket){
   socket.on('changeSiteData', function(data) {
@@ -38,11 +39,18 @@ io.on('connection', function(socket){
     })
   })
   socket.on('newPageToGallery', function(pageName, isPublic, anyoneCanEdit, userID) {
-    gallery.child('pageName').set({authorID: userID, isPublic: isPublic, anyoneCanEdit: anyoneCanEdit});
-  })
+    userInfo.child(userID).child('unpublishedpages').child(pageName).set({authorID: userID, isPublic: isPublic, anyoneCanEdit: anyoneCanEdit});
+  });
   socket.on('isUserValid', function(userID, pageName) {
     gallery.child('pageName').once('value', function(snapshot) {
-      socket.emit('userValidResults', snapshot.val().authorID === userID);
+      userInfo.child('unpublishedpages').once('value', function(userSnap) {
+        socket.emit('userValidResults', (snapshot.val() !== null && snapshot.val().authorID === userID) || (userSnap.val() !== null && pageName in userSnap.val()));
+      });
+    })
+  })
+  socket.on('getUserPages', function(userID) {
+    userInfo.child(userID).once('value', function(snapshot) {
+      socket.emit('userPageRes', snapshot.val());
     })
   })
 })

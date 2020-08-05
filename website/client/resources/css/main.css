@@ -483,7 +483,6 @@ button[disabled="false"]:hover .next {
 .new_page_ref {
   color: white;
   text-decoration: none;
-  float: right;
   margin-top: 5px;
   background-color: rgb(83, 135, 62);
 }

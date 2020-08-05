@@ -13,7 +13,16 @@
     <div class ="center-outside">
       <div class = "header-outer">
         <header class = "header">
-          <button class = "new_page_ref" id = "newPageButton">New +</button>
+          <div style = "float: right;">
+            <div id = "fileDropdown" style = "display: inline-block" class = "dropdown">
+              <button class = "dropbtn menubutton">My Profile</button>
+              <div class = "dropdown-content">
+                <a href = "main.html?userCreated">My pages</a>
+                <a id = "editButton">Edit Profile</a>
+              </div>
+            </div>
+            <button style = "display: inline-block" class = "new_page_ref" id = "newPageButton">New +</button>
+          </div>
           <!--img width = "44" height = "36" class = "jbg-top-loago" alt = "jbg-top-logo" src = "images/jasperboxlarge.png"></img>
           <img class = "jbg-top-logo" alt = "jbg-top-logo" src = "images/logo.svg"></img-->
         </header>
@@ -21,18 +30,43 @@
     </div>
     <div style = "margin-top: 55px;">
       <h1 style = "text-align: center;">Gallery</h1>
-      <h2>Prototypes by Surya Jasper</h2>
-      <table>
-        <tbody>
-          <tr>
-            <button onclick = "window.location.href='javascript/index.html'" class = "languageSelection">JavaScript</button>
-            <button onclick = "window.location.href='html/index.html'" class = "languageSelection">HTML</button>
-            <button onclick = "window.location.href='css/index.html'" class = "languageSelection">CSS</button>
-            <button onclick = "window.location.href='node/index.html'" class = "languageSelection">NODE.JS</button>
-            <button onclick = "window.location.href='socket/index.html'" class = "languageSelection">SOCKET.IO</button>
-          </tr>
-        </tbody>
-      </table>
+      <div id = "publicStuff" style = "display: none;">
+        <h2>Prototypes by Surya Jasper</h2>
+        <table>
+          <tbody>
+            <tr>
+              <button onclick = "window.location.href='javascript/index.html'" class = "languageSelection">JavaScript</button>
+              <button onclick = "window.location.href='html/index.html'" class = "languageSelection">HTML</button>
+              <button onclick = "window.location.href='css/index.html'" class = "languageSelection">CSS</button>
+              <button onclick = "window.location.href='node/index.html'" class = "languageSelection">NODE.JS</button>
+              <button onclick = "window.location.href='socket/index.html'" class = "languageSelection">SOCKET.IO</button>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div id = "userCreatedStuff" style = "display: none;">
+        <h2 id = "unfinishedH2">Your Unfinished Pages</h2>
+        <table>
+          <tbody>
+            <tr id = "unfinishedTr">
+            </tr>
+          </tbody>
+        </table>
+        <h2 id = "finishedPublicH2">Your Finished Public Pages</h2>
+        <table>
+          <tbody>
+            <tr id = "finishedPublicTr">
+            </tr>
+          </tbody>
+        </table>
+        <h2 id = "finishedPrivateH2">Your Finished Private Pages</h2>
+        <table>
+          <tbody>
+            <tr id = "finishedPrivateTr">
+            </tr>
+          </tbody>
+        </table>
+      </div>
       <div id = "newPageForm" class = "centered" style = "display: none;">
         <form class = "prettyForm">
           Name of Page<input type = "text" id = "pageName" ></input><br>

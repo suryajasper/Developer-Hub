@@ -16,25 +16,35 @@ admin.initializeApp({
 
 var database = admin.database();
 
-var refSiteData = database.ref("siteData");
 var gallery = database.ref("gallery");
 var userInfo = database.ref('userInfo');
 
 io.on('connection', function(socket){
   socket.on('changeSiteData', function(data) {
-    var topic = data.topic;
-    refSiteData.child(data.userID).child(topic).update({content: data.content});
+    userInfo.child(data.userID).child('unpublishedpages').child(data.topic).once('value', function(userInfoSnap) {
+      console.log(data.topic);
+      if (userInfoSnap.val() !== null) {
+        console.log('found it ' + data.content.length.toString());
+        userInfo.child(data.userID).child('unpublishedpages').child(data.topic).update({content: data.content});
+      } else {
+        gallery.child(data.topic).once('value', function(gallerySnap) {
+          if (gallerySnap.val() !== null) {
+            gallery.child(data.topic).update({content: data.content});
+          }
+        })
+      }
+    })
   })
   socket.on('getSiteData', function(userID, topic) {
-    refSiteData.once('value', function(deltaSnap) {
-      if (deltaSnap.val() !== null) {
-        if (deltaSnap.val()[userID] !== null) {
-          refSiteData.child(userID).once("value", function(snapshot) {
-            if (snapshot.val()[topic] !== null) {
-              socket.emit('updateSiteData', snapshot.val()[topic]['content']);
-            }
-          })
-        }
+    userInfo.child(userID).child('unpublishedpages').child(topic).once('value', function(userInfoSnap) {
+      if (userInfoSnap.val() !== null && 'content' in userInfoSnap.val()) {
+        socket.emit('updateSiteData', userInfoSnap.val().content);
+      } else {
+        gallery.child(topic).once('value', function(gallerySnap) {
+          if (gallerySnap.val() !== null && 'content' in gallerySnap.val()) {
+            socket.emit('updateSiteData', gallerySnap.val().content);
+          }
+        })
       }
     })
   })
@@ -43,7 +53,7 @@ io.on('connection', function(socket){
   });
   socket.on('isUserValid', function(userID, pageName) {
     gallery.child('pageName').once('value', function(snapshot) {
-      userInfo.child('unpublishedpages').once('value', function(userSnap) {
+      userInfo.child(userID).child('unpublishedpages').once('value', function(userSnap) {
         socket.emit('userValidResults', (snapshot.val() !== null && snapshot.val().authorID === userID) || (userSnap.val() !== null && pageName in userSnap.val()));
       });
     })

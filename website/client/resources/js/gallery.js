@@ -4,6 +4,16 @@ initializeFirebase();
 
 var userID;
 
+function addButtonLink(trId, name, href) {
+  var button = document.createElement('button');
+  button.innerHTML = name;
+  button.classList.add('languageSelection');
+  button.onclick = function() {
+    window.location.href = href;
+  }
+  document.getElementById(trId).appendChild(button);
+}
+
 firebase.auth().onAuthStateChanged(user => {
   if(user) {
     userID = user.uid;
@@ -18,6 +28,9 @@ firebase.auth().onAuthStateChanged(user => {
         if ('unpublishedpages' in userPages) {
           var names = Object.keys(userPages.unpublishedpages);
           document.getElementById('unfinishedH2').innerHTML = 'Your Unfinished Pages (' + names.length.toString() + ')';
+          for (var name of names) {
+            addButtonLink('unfinishedTr', name, 'tutorialpage.html?' + name);
+          }
         } else {
           document.getElementById('unfinishedH2').innerHTML = 'Your Unfinished Pages (0)';
         }
@@ -35,7 +48,7 @@ document.getElementById('createPage').onclick = function(e) {
 
   socket.emit('newPageToGallery', document.getElementById('pageName').value, document.getElementById('isPublic').checked,document.getElementById('anyoneCanEdit').checked, userID);
 
-  window.location.href = 'newPage.html?' + document.getElementById('pageName').value;
+  window.location.href = 'tutorialpage.html?' + document.getElementById('pageName').value;
 }
 
 if (window.location.href.split('?')[1] === 'userCreated') {

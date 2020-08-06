@@ -13,13 +13,15 @@ var sidebarshow = document.getElementById('sidebarshow');
 var main = document.getElementsByClassName('main')[0];
 var topBar = document.getElementById('top-options');
 var editMode = document.getElementById('editMode');
-var topic = document.getElementById('topic') === null ? null: document.getElementById('topic').innerHTML;
 
 var currentEdit = null;
 var currentToReplace = null;
 var currentEditCodeTag = null;
 
 var lastInputSelect = null;
+
+var userID;
+var topic;
 
 initializeFirebase();
 
@@ -259,27 +261,33 @@ function addNewSection() {
 
 firebase.auth().onAuthStateChanged(user => {
   if(user) {
-    refreshHeadings(true);
-    topBar.style.display = 'inline-block';
+    userID = user.uid;
+    topic = window.location.href.split('?')[1];
 
-    if (topic !== null) {
-      socket.emit('getSiteData', user.uid, topic);
+    socket.emit('isUserValid', userID, topic);
+    socket.on('userValidResults', function(result) {
+      if (!result) {
+        window.location.href = "main.html";
+      } else {
+        refreshHeadings(true);
+        topBar.style.display = 'inline-block';
 
-      document.getElementById('saveButton').onclick = function(e) {
-        e.preventDefault();
-        if (editMode.value === 'editing') {
-          reverseEditMode();
-          handleEditMode();
+        socket.emit('getSiteData', user.uid, topic);
+        socket.on('updateSiteData', function(innerHTML) {
+          main.innerHTML = innerHTML;
+          Prism.highlightAll();
+          refreshHeadings(true);
+        })
+
+        document.getElementById('saveButton').onclick = function(e) {
+          e.preventDefault();
+          if (editMode.value === 'editing') {
+            reverseEditMode();
+            handleEditMode();
+          }
+          socket.emit('changeSiteData', {userID: user.uid, topic: topic, content: main.innerHTML});
         }
-        socket.emit('changeSiteData', {userID: user.uid, topic: topic, content: main.innerHTML});
       }
-    }
-
-    socket.on('updateSiteData', function(innerHTML) {
-      console.log(innerHTML);
-      main.innerHTML = innerHTML;
-      Prism.highlightAll();
-      refreshHeadings(true);
     })
   }
 });

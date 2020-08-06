@@ -228,6 +228,9 @@ function addNewSection() {
           sectDiv.innerHTML += code;
           codeBlock = '';
         } else {
+          if (language === 'markup') {
+            line = line.replaceAll('<', '&lt;');
+          }
           codeBlock += line + '\n';
         }
       }

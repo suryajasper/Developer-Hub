@@ -493,3 +493,8 @@ button[disabled="false"]:hover .next {
   border-radius: 5px;
   font-size: 1.25em;
 }
+hr.line {
+  height: 2px;
+  background-color: rgb(179, 179, 179);
+  border: none;
+}

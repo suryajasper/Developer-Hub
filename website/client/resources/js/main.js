@@ -157,6 +157,7 @@ function parseTextArea(content, sectDiv) {
         listIsOrdered = false;
       } else if (line.includes('```')) {
         inCodeBlock = true;
+
         if (line.replaceAll(' ', '').length > 3) {
           language = line.replaceAll(' ', '').substring(3, line.replaceAll(' ', '').length).toLowerCase();
         } else {
@@ -395,8 +396,16 @@ editMode.oninput = function() {
   handleEditMode();
 }
 
-document.getElementById('withinSection').onclick = function(e) {
-  e.preventDefault();
+function insertAfter(newNode, referenceNode) {
+  referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+}
+function insertBefore(newNode, referenceNode) {
+  referenceNode.parentNode.insertBefore(newNode, referenceNode);
+}
+
+var inBetweenHr = null;
+
+function insertElementView(after) {
   if (editMode.value === 'editing') {
     makeLastEditView();
   }
@@ -405,15 +414,71 @@ document.getElementById('withinSection').onclick = function(e) {
     if (headingAll.length > 0) {
       for (var element of headingAll) {
         element.onmouseover = function() {
-          this.style.border = "1px solid white";
+          inBetweenHr = document.createElement('hr');
+          inBetweenHr.classList.add('line');
+          if (after)
+            insertAfter(inBetweenHr, this);
+          else
+            insertBefore(inBetweenHr, this);
         }
         element.onmouseout = function() {
-          this.style.border = "none";
+          inBetweenHr.remove();
         }
         element.onclick = function() {
+          changeEditModeToView();
+          var fieldset = document.createElement('fieldset');
+          fieldset.style.marginBottom = '90px';
 
+          var contentIn = document.createElement('textarea');
+          contentIn.classList.add('ignoreCSS');
+          contentIn.classList.add('contentInCSS');
+
+          inBetweenHr.parentNode.replaceChild(fieldset, inBetweenHr);
+
+          var createButton = document.createElement('button');
+          createButton.innerHTML = 'Add Section';
+          createButton.style.display = 'inline-block';
+          createButton.onclick = function(e) {
+            e.preventDefault();
+
+            var tempDiv = document.createElement('div');
+
+            var content = contentIn.value.split('\n');
+
+            parseTextArea(content, tempDiv);
+
+            for (var i = tempDiv.children.length-1; i >= 0; i--) {
+              insertAfter(tempDiv.children[i], fieldset);
+            }
+            fieldset.remove();
+
+            Prism.highlightAll();
+          }
+
+          var cancelButton = document.createElement('button');
+          cancelButton.innerHTML = 'Cancel';
+          cancelButton.style.display = 'inline-block';
+          cancelButton.onclick = function(e) {
+            fieldset.remove();
+          }
+
+          fieldset.appendChild(contentIn);
+          fieldset.appendChild(createButton);
+          fieldset.appendChild(cancelButton);
+
+          fieldset.style.marginBottom = '0px';
         }
       }
     }
   }
+}
+
+document.getElementById('afterSection').onclick = function(e) {
+  e.preventDefault();
+  insertElementView(true);
+}
+
+document.getElementById('beforeSection').onclick = function(e) {
+  e.preventDefault();
+  insertElementView(false);
 }

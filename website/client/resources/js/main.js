@@ -13,6 +13,7 @@ var sidebarshow = document.getElementById('sidebarshow');
 var main = document.getElementsByClassName('main')[0];
 var topBar = document.getElementById('top-options');
 var editMode = document.getElementById('editMode');
+var headings = ['h1', 'h2', 'h3', 'h4', 'pre', 'p'];
 
 var currentEdit = null;
 var currentToReplace = null;
@@ -24,6 +25,14 @@ var userID;
 var topic;
 
 initializeFirebase();
+
+String.prototype.replaceAll = function(toReplace, replaceWith) {
+  var replaced = this.replace(toReplace, replaceWith);
+  while (replaced.includes(toReplace)) {
+    replaced = replaced.replace(toReplace, replaceWith);
+  }
+  return replaced;
+}
 
 sidebarshow.onclick = function() {
   if (sidenav.style.display === 'block') {
@@ -106,6 +115,86 @@ function dropdown(name, values, placeholders) {
   return {dd: dropdiv, aa: arrA};
 }
 
+function parseTextArea(content, sectDiv) {
+  var inCodeBlock = false;
+  var language = 'javascript';
+  var codeBlock = '';
+
+  var listElements = [];
+  var listIsOrdered = false;
+  console.log(content);
+
+  for (var line of content) {
+    var toCreate;
+    if (!inCodeBlock) {
+      if (listElements.length > 0 && (listIsOrdered && !(!isNaN(line.substring(0, 1)) && line.substring(1, 3) === '. ')) || (!listIsOrdered && line.substring(1, 2) !== '- ')) {
+        var parent = listIsOrdered ? document.createElement('ol') : document.createElement('ul');
+        for (var listElement of listElements) {
+          var li = document.createElement('li');
+          li.innerHTML = listElement;
+          parent.appendChild(li);
+        }
+        sectDiv.appendChild(parent);
+        listElements = [];
+      }
+
+      if (line.substring(0,2) === '##') {
+        toCreate = document.createElement('h3');
+        toCreate.innerHTML = line.substring(2);
+      } else if (line.substring(0,1) === '#') {
+        toCreate = document.createElement('h2');
+        toCreate.innerHTML = line.substring(1);
+      } else if (!isNaN(line.substring(0, 1)) && line.substring(1, 3) === '. ') {
+        if (listElements.length > 0 || line.substring(0, 1) === '1') {
+          listElements.push(line.substring(3));
+          listIsOrdered = true;
+        } else {
+          toCreate = document.createElement('p');
+          toCreate.innerHTML = line;
+        }
+      } else if (line.substring(0, 2) === '- ') {
+        listElements.push(line.substring(2));
+        listIsOrdered = false;
+      } else if (line.includes('```')) {
+        inCodeBlock = true;
+        if (line.replaceAll(' ', '').length > 3) {
+          language = line.replaceAll(' ', '').substring(3, line.replaceAll(' ', '').length).toLowerCase();
+        } else {
+          language = 'javascript';
+        }
+        continue;
+      } else {
+        toCreate = document.createElement('p');
+        toCreate.innerHTML = line;
+      }
+      if (toCreate !== undefined)
+        sectDiv.appendChild(toCreate);
+    } else {
+      if (line.includes('```')) {
+        inCodeBlock = false;
+        var code = '<pre class="language-' + language + '" data-src-loaded="" data-src="../resources/prism/prism.js"><code class="language-' + language + '">' + codeBlock.substring(0, codeBlock.length-1) + '</code></pre>'
+        sectDiv.innerHTML += code;
+        codeBlock = '';
+      } else {
+        if (language === 'markup') {
+          line = line.replaceAll('<', '&lt;');
+        }
+        codeBlock += line + '\n';
+      }
+    }
+  }
+  if (listElements.length > 0) {
+    var parent = listIsOrdered ? document.createElement('ol') : document.createElement('ul');
+    for (var listElement of listElements) {
+      var li = document.createElement('li');
+      li.innerHTML = listElement;
+      parent.appendChild(li);
+    }
+    sectDiv.appendChild(parent);
+    listElements = [];
+  }
+}
+
 function addNewSection() {
   var fieldset = document.createElement('fieldset');
   fieldset.style.marginBottom = '90px';
@@ -124,34 +213,6 @@ function addNewSection() {
   var contentIn = document.createElement('textarea');
   contentIn.classList.add('ignoreCSS');
   contentIn.classList.add('contentInCSS');
-  //contentIn.contentEditable = true;
-  /*var keywords = ["SELECT","FROM","WHERE","LIKE","BETWEEN","NOT LIKE","FALSE","NULL","FROM","TRUE","NOT IN"];
-  contentIn.onkeyup = function(e){
-    // Space key pressed
-    if (e.keyCode == 32){
-      var newHTML = "";
-      // Loop through words
-      console.log($(this).text().replace(/[\s]+/g, " "));
-      $(this).text().replace(/[\s]+/g, " ").trim().split(" ").forEach(function(val){
-        // If word is statement
-        if (keywords.indexOf(val.trim().toUpperCase()) > -1)
-          newHTML += "<span class='statement'>" + val + "&nbsp;</span>";
-        else
-          newHTML += "<span class='other'>" + val + "&nbsp;</span>";
-      });
-      $(this).html(newHTML);
-
-      // Set cursor postion to end of text
-      var child = $(this).children();
-      var range = document.createRange();
-      var sel = window.getSelection();
-      range.setStart(child[child.length-1], 1);
-      range.collapse(true);
-      sel.removeAllRanges();
-      sel.addRange(range);
-      this.focus();
-    }
-  };*/
 
   main.appendChild(fieldset);
 
@@ -160,7 +221,7 @@ function addNewSection() {
   createButton.style.display = 'inline-block';
   createButton.onclick = function(e) {
     e.preventDefault();
-    var content = contentIn.value.split('\n');
+
     var sectDiv = document.createElement('section');
     sectDiv.id = legendInput.value;
 
@@ -169,82 +230,10 @@ function addNewSection() {
     h1.style.textAlign = 'center';
     sectDiv.appendChild(h1);
 
-    var inCodeBlock = false;
-    var language = 'javascript';
-    var codeBlock = '';
+    var content = contentIn.value.split('\n');
 
-    var listElements = [];
-    var listIsOrdered = false;
+    parseTextArea(content, sectDiv);
 
-    for (var line of content) {
-      var toCreate;
-      if (!inCodeBlock) {
-        if (listElements.length > 0 && (listIsOrdered && !(!isNaN(line.substring(0, 1)) && line.substring(1, 3) === '. ')) || (!listIsOrdered && line.substring(1, 2) !== '- ')) {
-          var parent = listIsOrdered ? document.createElement('ol') : document.createElement('ul');
-          for (var listElement of listElements) {
-            var li = document.createElement('li');
-            li.innerHTML = listElement;
-            parent.appendChild(li);
-          }
-          sectDiv.appendChild(parent);
-          listElements = [];
-        }
-
-        if (line.substring(0,2) === '##') {
-          toCreate = document.createElement('h3');
-          toCreate.innerHTML = line.substring(2);
-        } else if (line.substring(0,1) === '#') {
-          toCreate = document.createElement('h2');
-          toCreate.innerHTML = line.substring(1);
-        } else if (!isNaN(line.substring(0, 1)) && line.substring(1, 3) === '. ') {
-          if (listElements.length > 0 || line.substring(0, 1) === '1') {
-            listElements.push(line.substring(3));
-            listIsOrdered = true;
-          } else {
-            toCreate = document.createElement('p');
-            toCreate.innerHTML = line;
-          }
-        } else if (line.substring(0, 2) === '- ') {
-          listElements.push(line.substring(2));
-          listIsOrdered = false;
-        } else if (line.includes('```')) {
-          inCodeBlock = true;
-          if (line.replaceAll(' ', '').length > 3) {
-            language = line.replaceAll(' ', '').substring(3, line.replaceAll(' ', '').length).toLowerCase();
-          } else {
-            language = 'javascript';
-          }
-          continue;
-        } else {
-          toCreate = document.createElement('p');
-          toCreate.innerHTML = line;
-        }
-        if (toCreate !== undefined)
-          sectDiv.appendChild(toCreate);
-      } else {
-        if (line.includes('```')) {
-          inCodeBlock = false;
-          var code = '<pre class="language-' + language + '" data-src-loaded="" data-src="../resources/prism/prism.js"><code class="language-' + language + '">' + codeBlock.substring(0, codeBlock.length-1) + '</code></pre>'
-          sectDiv.innerHTML += code;
-          codeBlock = '';
-        } else {
-          if (language === 'markup') {
-            line = line.replaceAll('<', '&lt;');
-          }
-          codeBlock += line + '\n';
-        }
-      }
-    }
-    if (listElements.length > 0) {
-      var parent = listIsOrdered ? document.createElement('ol') : document.createElement('ul');
-      for (var listElement of listElements) {
-        var li = document.createElement('li');
-        li.innerHTML = listElement;
-        parent.appendChild(li);
-      }
-      sectDiv.appendChild(parent);
-      listElements = [];
-    }
     main.replaceChild(sectDiv, fieldset);
     Prism.highlightAll();
     refreshHeadings(true);
@@ -321,71 +310,82 @@ function reverseEditMode() {
   }
 }
 
-function handleEditMode() {
-  var headings = ['h1', 'h2', 'h3', 'h4', 'pre', 'p'];
-  console.log(editMode.value);
-  if (editMode.value === 'editing') {
-    for (var heading of headings) {
-      var headingAll = document.getElementsByTagName(heading);
-      if (headingAll.length > 0) {
-        for (var element of headingAll) {
-          element.onmouseover = function() {
-            this.style.border = "1px solid white";
+function changeEditModeToView() {
+  makeLastEditView();
+  for (var heading of headings) {
+    var headingAll = document.getElementsByTagName(heading);
+    if (headingAll.length > 0) {
+      for (var element of headingAll) {
+        element.onmouseover = null;
+        element.onmouseout = null;
+        element.onclick = null;
+      }
+    }
+  }
+}
+
+function changeEditModeToEdit() {
+  for (var heading of headings) {
+    var headingAll = document.getElementsByTagName(heading);
+    if (headingAll.length > 0) {
+      for (var element of headingAll) {
+        element.onmouseover = function() {
+          this.style.border = "1px solid white";
+        }
+        element.onmouseout = function() {
+          this.style.border = "none";
+        }
+        element.onclick = function() {
+          if (currentToReplace !== null) {
+            makeLastEditView();
           }
-          element.onmouseout = function() {
-            this.style.border = "none";
+          currentEdit = this;
+          if (this.tagName === 'PRE' || this.tagName === 'P') {
+            currentEditCodeTag = this.firstChild.className;
+            var input = document.createElement('textarea');
+            input.classList.add('ignoreCSS');
+            input.style.display = this.style.display;
+            input.style.width = "100%";
+            var fontSize = parseFloat(window.getComputedStyle(this, null).getPropertyValue('font-size')).toString();
+            input.style.fontSize = fontSize;
+            input.style.height = window.getComputedStyle(this, null).getPropertyValue('height')
+            input.style.textAlign = this.style.textAlign;
+            input.value = this.textContent;
+            this.parentNode.replaceChild(input, this);
+            input.focus();
+            currentToReplace = input;
           }
-          element.onclick = function() {
-            if (currentToReplace !== null) {
+          else {
+            var input = document.createElement('input');
+            input.style.display = this.style.display;
+            input.style.backgroundColor = "black";
+            input.style.color = "white";
+            input.style.width = "100%";
+            var fontSize = parseFloat(window.getComputedStyle(this, null).getPropertyValue('font-size')).toString();
+            input.style.fontSize = fontSize;
+            input.style.textAlign = this.style.textAlign;
+            input.value = this.innerHTML;
+            this.parentNode.replaceChild(input, this);
+            input.focus();
+            currentToReplace = input;
+          }
+          $(document).keyup(function(e) {
+            if (e.key === "Escape") {
               makeLastEditView();
             }
-            currentEdit = this;
-            if (this.tagName === 'PRE' || this.tagName === 'P') {
-              currentEditCodeTag = this.firstChild.className;
-              var input = document.createElement('textarea');
-              input.classList.add('ignoreCSS');
-              input.style.display = this.style.display;
-              input.style.width = "100%";
-              var fontSize = parseFloat(window.getComputedStyle(this, null).getPropertyValue('font-size')).toString();
-              input.style.fontSize = fontSize;
-              input.style.height = window.getComputedStyle(this, null).getPropertyValue('height')
-              input.style.textAlign = this.style.textAlign;
-              input.value = this.textContent;
-              this.parentNode.replaceChild(input, this);
-              input.focus();
-              currentToReplace = input;
-            }
-            else {
-              var input = document.createElement('input');
-              input.style.display = this.style.display;
-              input.style.backgroundColor = "black";
-              input.style.color = "white";
-              input.style.width = "100%";
-              var fontSize = parseFloat(window.getComputedStyle(this, null).getPropertyValue('font-size')).toString();
-              input.style.fontSize = fontSize;
-              input.style.textAlign = this.style.textAlign;
-              input.value = this.innerHTML;
-              this.parentNode.replaceChild(input, this);
-              input.focus();
-              currentToReplace = input;
-            }
-          }
+          });
         }
       }
     }
   }
+}
+
+function handleEditMode() {
+  if (editMode.value === 'editing') {
+    changeEditModeToEdit();
+  }
   else {
-    makeLastEditView();
-    for (var heading of headings) {
-      var headingAll = document.getElementsByTagName(heading);
-      if (headingAll.length > 0) {
-        for (var element of headingAll) {
-          element.onmouseover = null;
-          element.onmouseout = null;
-          element.onclick = null;
-        }
-      }
-    }
+    changeEditModeToView();
   }
 }
 
@@ -393,4 +393,27 @@ handleEditMode();
 
 editMode.oninput = function() {
   handleEditMode();
+}
+
+document.getElementById('withinSection').onclick = function(e) {
+  e.preventDefault();
+  if (editMode.value === 'editing') {
+    makeLastEditView();
+  }
+  for (var heading of headings) {
+    var headingAll = document.getElementsByTagName(heading);
+    if (headingAll.length > 0) {
+      for (var element of headingAll) {
+        element.onmouseover = function() {
+          this.style.border = "1px solid white";
+        }
+        element.onmouseout = function() {
+          this.style.border = "none";
+        }
+        element.onclick = function() {
+
+        }
+      }
+    }
+  }
 }

@@ -14,7 +14,7 @@
   <body>
     <div class = "header-outer">
       <header class = "header">
-        <img id = "sidebarshow" src = "../resources/images/sidebar.svg" style = "height: 53px; width: 53px;"></img>
+        <img onclick = "window.location.href = 'main.html';" src = "../resources/images/home.png" style = "height: 40px; width: 46px; position: relative; margin-top: 5px; margin-left: 5px; margin-right: 5px; cursor: pointer;"></img>
         <div id = "top-options" style = "display: none;" class = "centered-horizontal top-logo" alt = "top-logo">
           <div id = "topmenu" style = "display: inline-block; margin-right: 5px;">
             <div id = "fileDropdown" class = "dropdown">
@@ -24,10 +24,16 @@
                 <a id = "editButton">Edit</a>
               </div>
             </div>
-            <div id = "propertyDropdown" class = "dropdown">
-              <button class = "dropbtn menubutton">properties</button>
+            <div id = "viewDropdown" class = "dropdown">
+              <button class = "dropbtn menubutton">view</button>
               <div class = "dropdown-content">
-                <a id = "noInList">don't include in list</a>
+                <a id = "sidebarshow">Toggle sidenav</a>
+              </div>
+            </div>
+            <div id = "insertDropdown" class = "dropdown">
+              <button class = "dropbtn menubutton">insert</button>
+              <div class = "dropdown-content">
+                <a id = "withinSection">within section</a>
               </div>
             </div>
           </div>

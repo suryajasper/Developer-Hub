@@ -326,6 +326,12 @@ function changeEditModeToView() {
 }
 
 function changeEditModeToEdit() {
+  $(document).keyup(function(e) {
+    if (e.key === "Escape") {
+      makeLastEditView();
+      console.log('dude');
+    }
+  });
   for (var heading of headings) {
     var headingAll = document.getElementsByTagName(heading);
     if (headingAll.length > 0) {
@@ -370,11 +376,6 @@ function changeEditModeToEdit() {
             input.focus();
             currentToReplace = input;
           }
-          $(document).keyup(function(e) {
-            if (e.key === "Escape") {
-              makeLastEditView();
-            }
-          });
         }
       }
     }
@@ -483,11 +484,38 @@ document.getElementById('beforeSection').onclick = function(e) {
   insertElementView(false);
 }
 
+document.getElementById('deleteElement').onclick = function(e) {
+  e.preventDefault();
+  if (editMode.value === 'editing') {
+    makeLastEditView();
+  }
+  for (var heading of headings) {
+    var headingAll = document.getElementsByTagName(heading);
+    if (headingAll.length > 0) {
+      for (var element of headingAll) {
+        element.onmouseover = function() {
+          this.style.border = "1px solid rgb(190, 140, 140)";
+        }
+        element.onmouseout = function() {
+          this.style.border = "none";
+        }
+        element.onclick = function() {
+          this.remove();
+        }
+      }
+    }
+  }
+  document.getElementById('exitModeButton').style.display = 'block';
+  document.getElementById('exitModeButton').onclick = function() {
+    changeEditModeToView();
+    document.getElementById('exitModeButton').style.display = 'none';
+  }
+}
+
 document.getElementById('renameButton').onclick = function(e) {
   e.preventDefault();
   document.getElementById('newName').value = topic;
   document.getElementById('renameForm').style.display = 'block';
-  document.getElementById('cancelRename').onclick = function(e) {e.preventDefault(); document.getElementById('renameForm').style.display = 'none'; }
   document.getElementById('confirmRename').onclick = function(e2) {
     e2.preventDefault();
     var newName = document.getElementById('newName').value;
@@ -495,5 +523,9 @@ document.getElementById('renameButton').onclick = function(e) {
     socket.on('renameCompleted', function() {
       window.location.href = 'tutorialpage.html?' + newName;
     })
+  }
+  document.getElementById('cancelRename').onclick = function(e3) {
+    e3.preventDefault();
+    document.getElementById('renameForm').style.display = 'none';
   }
 }

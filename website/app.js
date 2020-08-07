@@ -63,6 +63,16 @@ io.on('connection', function(socket){
       socket.emit('userPageRes', snapshot.val());
     })
   })
+  socket.on('rename', function(userID, oldTitle, newTitle) {
+    userInfo.child(userID).child('unpublishedpages').child(oldTitle).once('value').then(function(snapshot) {
+      var data = snapshot.val();
+      var update = {};
+      update[newTitle] = data;
+      userInfo.child(userID).child('unpublishedpages').update(update);
+      userInfo.child(userID).child('unpublishedpages').child(oldTitle).remove();
+      socket.emit('renameCompleted');
+    });
+  })
 })
 
 http.listen(port, function(){

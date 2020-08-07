@@ -482,3 +482,18 @@ document.getElementById('beforeSection').onclick = function(e) {
   e.preventDefault();
   insertElementView(false);
 }
+
+document.getElementById('renameButton').onclick = function(e) {
+  e.preventDefault();
+  document.getElementById('newName').value = topic;
+  document.getElementById('renameForm').style.display = 'block';
+  document.getElementById('cancelRename').onclick = function(e) {e.preventDefault(); document.getElementById('renameForm').style.display = 'none'; }
+  document.getElementById('confirmRename').onclick = function(e2) {
+    e2.preventDefault();
+    var newName = document.getElementById('newName').value;
+    socket.emit('rename', userID, topic, newName);
+    socket.on('renameCompleted', function() {
+      window.location.href = 'tutorialpage.html?' + newName;
+    })
+  }
+}

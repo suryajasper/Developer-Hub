@@ -21,7 +21,8 @@
               <button class = "dropbtn menubutton">file</button>
               <div class = "dropdown-content">
                 <a id = "saveButton">Save</a>
-                <a id = "editButton">Edit</a>
+                <a id = "renameButton">Rename</a>
+                <a id = "publishButton">Publish</a>
               </div>
             </div>
             <div id = "viewDropdown" class = "dropdown">
@@ -53,6 +54,17 @@
     </div>
     <div class = "main" style = "margin-top: 50px;">
 
+    </div>
+    <div id = "renameForm" class = "centered" style = "display: none;">
+      <form class = "prettyForm">
+        New Name<input type = "text" id = "newName" ></input>
+        <div class = "center-outside">
+          <div class = "center-div" style = "margin-top: 0px;">
+            <input class = "formatLikeButton" type = "submit" style = "display: inline-block; border: none; margin-right: 5px;" id = "confirmRename" value = "Rename"></input>
+            <button style = "display: inline-block;" id = "cancelRename">Cancel</button>
+          </div>
+        </div>
+      </form>
     </div>
     <script src="https://www.gstatic.com/firebasejs/7.9.3/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.9.3/firebase-auth.js"></script>

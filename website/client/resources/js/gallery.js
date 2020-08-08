@@ -34,6 +34,16 @@ firebase.auth().onAuthStateChanged(user => {
         } else {
           document.getElementById('unfinishedH2').innerHTML = 'Your Unfinished Pages (0)';
         }
+
+        if ('publishedpages' in userPages) {
+          var names = Object.keys(userPages.publishedpages);
+          document.getElementById('finishedPublicH2').innerHTML = 'Your Published Pages (' + names.length.toString() + ')';
+          for (var name of names) {
+            addButtonLink('finishedPublicTr', userPages.publishedpages[name], 'tutorialpage.html?' + userPages.publishedpages[name]);
+          }
+        } else {
+          document.getElementById('finishedPublicH2').innerHTML = 'Your Published Public Pages (0)';
+        }
       }
     })
   }

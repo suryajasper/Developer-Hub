@@ -22,9 +22,7 @@ var userInfo = database.ref('userInfo');
 io.on('connection', function(socket){
   socket.on('changeSiteData', function(data) {
     userInfo.child(data.userID).child('unpublishedpages').child(data.topic).once('value', function(userInfoSnap) {
-      console.log(data.topic);
       if (userInfoSnap.val() !== null) {
-        console.log('found it ' + data.content.length.toString());
         userInfo.child(data.userID).child('unpublishedpages').child(data.topic).update({content: data.content});
       } else {
         gallery.child(data.topic).once('value', function(gallerySnap) {

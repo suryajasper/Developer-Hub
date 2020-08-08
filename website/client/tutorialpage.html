@@ -75,6 +75,20 @@
         </div>
       </form>
     </div>
+    <div id = "publishForm" class = "centered" style = "display: none;">
+      <form class = "prettyForm">
+        By publishing this page, you are simply making it publicly available with the following parameters. Make sure to do this when you think your page contains sufficient data to help others. You can still edit this page after publishing without having to re-publish to save your edits.
+        <!--Name of Page<input type = "text" id = "pageName" ></input><br>
+        Make Public<input type = "checkbox" id = "isPublic" checked = "true"></input><br>
+        Anyone Can Edit<input type = "checkbox" id = "anyoneCanEdit" checked = "true"></input><br>-->
+        <div class = "center-outside">
+          <div class = "center-div" style = "margin-top: 0px;">
+            <input class = "formatLikeButton" type = "submit" style = "display: inline-block; border: none; margin-right: 5px;" id = "publishPage" value = "Publish"></input>
+            <button style = "display: inline-block;" id = "publishCancel">Cancel</button>
+          </div>
+        </div>
+      </form>
+    </div>
     <script src="https://www.gstatic.com/firebasejs/7.9.3/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.9.3/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.9.3/firebase-database.js"></script>

@@ -73,6 +73,28 @@ io.on('connection', function(socket){
       socket.emit('renameCompleted');
     });
   })
+  socket.on('publishPage', function(userID, topic) {
+    userInfo.child(userID).child('unpublishedpages').child(topic).once('value', function(snapshot) {
+      if (snapshot.val() !== null) {
+        var galleryUpdate = {};
+        galleryUpdate[topic] = snapshot.val();
+        gallery.update(galleryUpdate);
+
+        userInfo.child(userID).child('unpublishedpages').child(topic).remove();
+
+        userInfo.child(userID).child('publishedpages').once('value', function(publishedSnapshot) {
+          var pub = publishedSnapshot.val();
+          if (pub !== null) {
+            var pubUpdate = {};
+            pubUpdate[Object.keys(pub).length] = topic;
+            userInfo.child(userID).child('publishedpages').update(pubUpdate);
+          } else {
+            userInfo.child(userID).child('publishedpages').update({0: topic});
+          }
+        })
+      }
+    })
+  })
 })
 
 http.listen(port, function(){

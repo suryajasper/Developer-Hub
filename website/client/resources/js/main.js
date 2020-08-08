@@ -529,3 +529,18 @@ document.getElementById('renameButton').onclick = function(e) {
     document.getElementById('renameForm').style.display = 'none';
   }
 }
+
+document.getElementById('publishButton').onclick = function(e) {
+  e.preventDefault();
+  document.getElementById('publishForm').style.display = 'block';
+
+  document.getElementById('publishCancel').onclick = function(e2) {
+    e2.preventDefault();
+    document.getElementById('publishForm').style.display = 'none';
+  }
+
+  document.getElementById('publishPage').onclick = function(e2) {
+    e2.preventDefault();
+    socket.emit('publishPage', userID, topic);
+  }
+}

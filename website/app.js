@@ -50,7 +50,7 @@ io.on('connection', function(socket){
     userInfo.child(userID).child('unpublishedpages').child(pageName).set({authorID: userID, isPublic: isPublic, anyoneCanEdit: anyoneCanEdit});
   });
   socket.on('isUserValid', function(userID, pageName) {
-    gallery.child('pageName').once('value', function(snapshot) {
+    gallery.child(pageName).once('value', function(snapshot) {
       userInfo.child(userID).child('unpublishedpages').once('value', function(userSnap) {
         socket.emit('userValidResults', (snapshot.val() !== null && snapshot.val().authorID === userID) || (userSnap.val() !== null && pageName in userSnap.val()));
       });

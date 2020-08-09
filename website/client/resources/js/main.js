@@ -501,6 +501,7 @@ document.getElementById('deleteElement').onclick = function(e) {
         }
         element.onclick = function() {
           this.remove();
+          refreshHeadings();
         }
       }
     }
@@ -542,5 +543,26 @@ document.getElementById('publishButton').onclick = function(e) {
   document.getElementById('publishPage').onclick = function(e2) {
     e2.preventDefault();
     socket.emit('publishPage', userID, topic);
+  }
+}
+
+document.getElementById('runBlock').onclick = function(e) {
+  e.preventDefault();
+  var allpre = document.getElementsByTagName('pre');
+  for (var element of allpre) {
+    element.onmouseover = function() {
+      this.style.border = "1px solid rgb(140, 190, 143)";
+    }
+    element.onmouseout = function() {
+      this.style.border = "none";
+    }
+    element.onclick = function() {
+      console.log(eval(this.textContent));
+    }
+  }
+  document.getElementById('exitModeButton').style.display = 'block';
+  document.getElementById('exitModeButton').onclick = function() {
+    changeEditModeToView();
+    document.getElementById('exitModeButton').style.display = 'none';
   }
 }

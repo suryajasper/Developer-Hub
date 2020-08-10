@@ -19,6 +19,8 @@ var currentEdit = null;
 var currentToReplace = null;
 var currentEditCodeTag = null;
 
+var currentCodeBlockExecs = [];
+
 var lastInputSelect = null;
 
 var userID;
@@ -546,6 +548,14 @@ document.getElementById('publishButton').onclick = function(e) {
   }
 }
 
+document.getElementById('clearAllExecs').onclick = function(e) {
+  e.preventDefault();
+  for (var exec of currentCodeBlockExecs) {
+    exec.remove();
+  }
+  currentCodeBlockExecs = [];
+}
+
 document.getElementById('runBlock').onclick = function(e) {
   e.preventDefault();
   var allpre = document.getElementsByTagName('pre');
@@ -557,7 +567,21 @@ document.getElementById('runBlock').onclick = function(e) {
       this.style.border = "none";
     }
     element.onclick = function() {
-      console.log(eval(this.textContent));
+      var textarea = document.createElement('textarea');
+      textarea.classList.add('ignoreCSS');
+      textarea.readOnly = true;
+      textarea.style.width = '100%';
+      textarea.style.resize = 'none';
+      var println = function(stuffToPrint) {
+        textarea.value += stuffToPrint + '\n';
+      }
+      try {
+        eval(this.textContent.replaceAll('console.log', 'println'));
+      } catch (e) {
+        textarea.value += e.message + '\n';
+      }
+      insertAfter(textarea, this);
+      currentCodeBlockExecs.push(textarea);
     }
   }
   document.getElementById('exitModeButton').style.display = 'block';

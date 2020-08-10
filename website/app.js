@@ -5,6 +5,12 @@ var app = express();
 var http = require('http').createServer(app);
 var io = require('socket.io')(http);
 app.use(express.static(__dirname + '/client'));
+app.use((req, res, next) => {
+	res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4002');
+	res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+	res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept');
+	next();
+});
 var port = process.env.PORT || 3000;
 
 var serviceAccount = require("/Users/suryajasper2004/Downloads/developer-hub-service-account.json");

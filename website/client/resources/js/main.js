@@ -1,5 +1,7 @@
 var socket = io();
-
+socket.on('redirect', function(pageHref) {
+  window.location.href = pageHref;
+})
 function urlify(text) {
   var urlRegex = /(https?:\/\/[^\s]+)/g;
   return text.replace(urlRegex, function(url) {
@@ -254,10 +256,19 @@ function addNewSection() {
   fieldset.appendChild(cancelButton);
 }
 
+function savePageData() {
+  if (editMode.value === 'editing') {
+    clearAllExecs();
+    reverseEditMode();
+    handleEditMode();
+  }
+  socket.emit('changeSiteData', {userID: userID, topic: topic, content: main.innerHTML});
+}
+
 firebase.auth().onAuthStateChanged(user => {
   if(user) {
     userID = user.uid;
-    topic = window.location.href.split('?')[1];
+    topic = window.location.href.split('?')[1].split('#')[0];
 
     socket.emit('isUserValid', userID, topic);
     socket.on('userValidResults', function(result) {
@@ -276,11 +287,7 @@ firebase.auth().onAuthStateChanged(user => {
 
         document.getElementById('saveButton').onclick = function(e) {
           e.preventDefault();
-          if (editMode.value === 'editing') {
-            reverseEditMode();
-            handleEditMode();
-          }
-          socket.emit('changeSiteData', {userID: user.uid, topic: topic, content: main.innerHTML});
+          savePageData();
         }
       }
     })
@@ -548,12 +555,15 @@ document.getElementById('publishButton').onclick = function(e) {
   }
 }
 
-document.getElementById('clearAllExecs').onclick = function(e) {
-  e.preventDefault();
+function clearAllExecs() {
   for (var exec of currentCodeBlockExecs) {
     exec.remove();
   }
   currentCodeBlockExecs = [];
+}
+
+document.getElementById('clearAllExecs').onclick = function(e) {
+  e.preventDefault();
 }
 
 document.getElementById('runBlock').onclick = function(e) {
@@ -589,4 +599,14 @@ document.getElementById('runBlock').onclick = function(e) {
     changeEditModeToView();
     document.getElementById('exitModeButton').style.display = 'none';
   }
+}
+
+document.getElementById('duplicateButton').onclick = function(e) {
+  e.preventDefault();
+  socket.emit('duplicate', userID, topic);
+}
+
+document.getElementById('deletePageButton').onclick = function(e) {
+  e.preventDefault();
+  socket.emit('deletePage', userID, topic);
 }

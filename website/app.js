@@ -58,7 +58,7 @@ io.on('connection', function(socket){
   socket.on('isUserValid', function(userID, pageName) {
     gallery.child(pageName).once('value', function(snapshot) {
       userInfo.child(userID).child('unpublishedpages').once('value', function(userSnap) {
-        socket.emit('userValidResults', (snapshot.val() !== null && snapshot.val().authorID === userID) || (userSnap.val() !== null && pageName in userSnap.val()));
+        socket.emit('userValidResults', (snapshot.val() !== null && (snapshot.val().anyoneCanEdit || snapshot.val().authorID === userID)) || (userSnap.val() !== null && pageName in userSnap.val()));
       });
     })
   })
@@ -97,6 +97,32 @@ io.on('connection', function(socket){
           }
         })
       }
+    })
+  })
+  socket.on('duplicate', function(userID, pageName) {
+    gallery.child(pageName).once('value', function(snapshot) {
+      userInfo.child(userID).child('unpublishedpages').child(pageName).once('value', function(userSnap) {
+        var update = {};
+        if (snapshot.val() !== null) {
+          update[pageName + '_copy'] = snapshot.val();
+        } else {
+          update[pageName + '_copy'] = userSnap.val();
+        }
+        userInfo.child(userID).child('unpublishedpages').update(update);
+        socket.emit('redirect', 'tutorialpage.html?' + pageName + '_copy');
+      })
+    })
+  })
+  socket.on('deletePage', function(userID, pageName) {
+    gallery.child(pageName).once('value', function(snapshot) {
+      userInfo.child(userID).child('unpublishedpages').child(pageName).once('value', function(userSnap) {
+        if (snapshot.val() !== null) {
+          gallery.child(pageName).remove();
+        } else {
+          userInfo.child(userID).child('unpublishedpages').child(pageName).remove();
+        }
+        socket.emit('redirect', 'main.html');
+      })
     })
   })
 })

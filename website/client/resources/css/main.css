@@ -269,7 +269,7 @@ input::-webkit-inner-spin-button {
   margin: 0;
 }
 
-button, .new_page_ref, .formatLikeButton {
+button:not(.sectionTextArea-AlignToRight):not(.dropbtn):not(.menubutton), .new_page_ref, .formatLikeButton {
   margin-right: 5px;
   margin-top: 10;
   background-color:#414141;
@@ -280,7 +280,7 @@ button, .new_page_ref, .formatLikeButton {
   cursor: pointer;
   display: block;
 }
-button:hover, .formatLikeButton:hover {
+button:not(.sectionTextArea-AlignToRight):hover, .formatLikeButton:hover {
   background-color: rgb(175, 178, 232);
 }
 
@@ -413,6 +413,7 @@ section a h1, h2, h3, h4, p {
 }
 
 .menubutton {
+  margin-top: 10;
   padding: 4px;
   padding-right: 6px;
   padding-left: 6px;
@@ -499,4 +500,38 @@ hr.line {
   height: 2px;
   background-color: rgb(179, 179, 179);
   border: none;
+}
+
+.sectionTextArea-Outer {
+  position: relative;
+}
+
+.sectionTextArea-AlignToRight {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0;
+  margin: 5;
+  margin-right: 16;
+}
+
+.sectionTextArea-AlignToRight.isButton {
+  border: none;
+  background-color: rgb(30, 119, 19);
+  padding: 4px;
+  border-radius: 50%;
+  font-size: 1em;
+  color: white;
+  cursor: pointer;
+  -webkit-transition: 0.5s;
+}
+
+.sectionTextArea-AlignToRight.isButton:hover {
+  background-color: rgb(33, 145, 20);
+  color: rgb(156, 156, 156);
+  -webkit-transition: 0.5s;
+}
+
+.sectionTextArea-textArea {
+  margin-top: 1.2em;
 }

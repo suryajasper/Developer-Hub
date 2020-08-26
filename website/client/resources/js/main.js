@@ -49,6 +49,25 @@ sidebarshow.onclick = function() {
     main.style.marginLeft = '160px';
   }
 }
+
+function runBlock(block) {
+  var textarea = document.createElement('textarea');
+  textarea.classList.add('ignoreCSS');
+  textarea.readOnly = true;
+  textarea.style.width = '100%';
+  textarea.style.resize = 'none';
+  var println = function(stuffToPrint) {
+    textarea.value += stuffToPrint + '\n';
+  }
+  try {
+    eval(block.textContent.replaceAll('console.log', 'println'));
+  } catch (e) {
+    textarea.value += e.message + '\n';
+  }
+  insertAfter(textarea, block);
+  currentCodeBlockExecs.push(textarea);
+}
+
 function CopyToClipboard(containerid) {
   if (document.selection) {
     var range = document.body.createTextRange();
@@ -73,6 +92,32 @@ function createNewDivAnchor() {
     window.scrollTo(0,document.body.scrollHeight);
   }
   return newDiv;
+}
+
+function highlightAll() {
+  Prism.highlightAll();
+  for (var pre of document.getElementsByTagName('pre')) (function(pre) {
+    if (!pre.classList.contains('sectionTextArea-textArea')) {
+      pre.classList.add('sectionTextArea-textArea');
+
+      var newDiv = document.createElement('div');
+      pre.parentNode.insertBefore(newDiv, pre);
+
+      newDiv.classList.add('sectionTextArea-outer');
+      pre.remove();
+
+      var newButton = document.createElement("button");
+      newButton.innerHTML = "Run";
+      newButton.classList.add('sectionTextArea-AlignToRight');
+      newButton.classList.add('isButton');
+      newButton.onclick = function() {
+        runBlock(pre);
+      }
+
+      newDiv.appendChild(newButton);
+      newDiv.appendChild(pre);
+    }
+  })(pre)
 }
 
 function refreshHeadings(addAddButton) {
@@ -240,7 +285,7 @@ function addNewSection() {
     parseTextArea(content, sectDiv);
 
     main.replaceChild(sectDiv, fieldset);
-    Prism.highlightAll();
+    highlightAll();
     refreshHeadings(true);
   }
 
@@ -281,7 +326,7 @@ firebase.auth().onAuthStateChanged(user => {
         socket.emit('getSiteData', user.uid, topic);
         socket.on('updateSiteData', function(innerHTML) {
           main.innerHTML = innerHTML;
-          Prism.highlightAll();
+          highlightAll();
           refreshHeadings(true);
         })
 
@@ -289,6 +334,11 @@ firebase.auth().onAuthStateChanged(user => {
           e.preventDefault();
           savePageData();
         }
+
+        Mousetrap.bind(['ctrl+s', 'command+s'], function(e) {
+          e.preventDefault();
+          savePageData();
+        });
       }
     })
   }
@@ -306,7 +356,7 @@ function makeLastEditView() {
       console.log(currentToReplace);
       if (currentToReplace.parentNode !== null)
         currentToReplace.parentNode.replaceChild(currentEdit, currentToReplace);
-      Prism.highlightAll();
+      highlightAll();
       console.log('highlight');
     }
   }
@@ -462,7 +512,7 @@ function insertElementView(after) {
             }
             fieldset.remove();
 
-            Prism.highlightAll();
+            highlightAll();
           }
 
           var cancelButton = document.createElement('button');
@@ -564,6 +614,7 @@ function clearAllExecs() {
 
 document.getElementById('clearAllExecs').onclick = function(e) {
   e.preventDefault();
+  clearAllExecs();
 }
 
 document.getElementById('runBlock').onclick = function(e) {
@@ -577,21 +628,7 @@ document.getElementById('runBlock').onclick = function(e) {
       this.style.border = "none";
     }
     element.onclick = function() {
-      var textarea = document.createElement('textarea');
-      textarea.classList.add('ignoreCSS');
-      textarea.readOnly = true;
-      textarea.style.width = '100%';
-      textarea.style.resize = 'none';
-      var println = function(stuffToPrint) {
-        textarea.value += stuffToPrint + '\n';
-      }
-      try {
-        eval(this.textContent.replaceAll('console.log', 'println'));
-      } catch (e) {
-        textarea.value += e.message + '\n';
-      }
-      insertAfter(textarea, this);
-      currentCodeBlockExecs.push(textarea);
+      runBlock(this);
     }
   }
   document.getElementById('exitModeButton').style.display = 'block';

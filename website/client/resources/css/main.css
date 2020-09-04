@@ -369,12 +369,15 @@ input:focus {
   text-decoration: none;
   display: block;
 }
+.dropdown-content a[disabled=true] {
+  color: gray;
+}
 
 .sidenav a {
   cursor: pointer;
 }
 
-.dropdown-content a:hover {background-color: #ddd;}
+.dropdown-content a:not([disabled=true]):hover {background-color: #ddd;}
 
 .dropdown:hover .dropdown-content {display: block; z-index: 1000;}
 

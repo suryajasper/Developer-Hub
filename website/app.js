@@ -24,6 +24,7 @@ var database = admin.database();
 
 var gallery = database.ref("gallery");
 var userInfo = database.ref('userInfo');
+var userChanges = database.ref('userChanges');
 
 io.on('connection', function(socket){
   socket.on('changeSiteData', function(data) {
@@ -33,7 +34,17 @@ io.on('connection', function(socket){
       } else {
         gallery.child(data.topic).once('value', function(gallerySnap) {
           if (gallerySnap.val() !== null) {
-            gallery.child(data.topic).update({content: data.content});
+						if (gallerySnap.val().authorID === data.userID) {
+							gallery.child(data.topic).update({content: data.content});
+						} else {
+							userChanges.child(data.userID).child(data.topic).once('value', function(userChangesSnap) {
+								if (userChangesSnap.val() !== null) {
+									userChanges.child(data.userID).child(data.topic).update({
+										content: data.content
+									})
+								}
+							})
+						}
           }
         })
       }
@@ -43,12 +54,19 @@ io.on('connection', function(socket){
     userInfo.child(userID).child('unpublishedpages').child(topic).once('value', function(userInfoSnap) {
       if (userInfoSnap.val() !== null && 'content' in userInfoSnap.val()) {
         socket.emit('updateSiteData', userInfoSnap.val().content);
-      } else {
-        gallery.child(topic).once('value', function(gallerySnap) {
-          if (gallerySnap.val() !== null && 'content' in gallerySnap.val()) {
-            socket.emit('updateSiteData', gallerySnap.val().content);
-          }
-        })
+      }
+			else {
+				userChanges.child(userID).child(topic).once('value', function(userChangesSnap) {
+					if (userChangesSnap.val() !== null) {
+						socket.emit('updateSiteData', userChangesSnap.val().content);
+					} else {
+						gallery.child(topic).once('value', function(gallerySnap) {
+		          if (gallerySnap.val() !== null && 'content' in gallerySnap.val()) {
+		            socket.emit('updateSiteData', gallerySnap.val().content);
+		          }
+		        })
+					}
+				})
       }
     })
   })
@@ -56,9 +74,15 @@ io.on('connection', function(socket){
     userInfo.child(userID).child('unpublishedpages').child(pageName).set({authorID: userID, isPublic: isPublic, anyoneCanEdit: anyoneCanEdit});
   });
   socket.on('isUserValid', function(userID, pageName) {
-    gallery.child(pageName).once('value', function(snapshot) {
-      userInfo.child(userID).child('unpublishedpages').once('value', function(userSnap) {
-        socket.emit('userValidResults', (snapshot.val() !== null && (snapshot.val().anyoneCanEdit || snapshot.val().authorID === userID)) || (userSnap.val() !== null && pageName in userSnap.val()));
+    gallery.child(pageName).once('value', function(gallerySnap) {
+      userInfo.child(userID).child('unpublishedpages').child(pageName).once('value', function(userSnap) {
+				if ((gallerySnap.val() !== null && gallerySnap.val().authorID === userID) || userSnap.val() !== null) {
+					socket.emit('userValidResults', 'author');
+				} else if (gallerySnap.val() !== null && gallerySnap.val().anyoneCanEdit) {
+					socket.emit('userValidResults', 'editor');
+				} else {
+					socket.emit('userValidResults', 'unauthorized');
+				}
       });
     })
   })

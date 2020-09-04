@@ -317,6 +317,12 @@ function savePageData() {
   socket.emit('changeSiteData', {userID: userID, topic: topic, content: main.innerHTML});
 }
 
+function changeAttr(ids, attr, val) {
+  for (var id of ids) {
+    document.getElementById(id).setAttribute(attr, val);
+  }
+}
+
 firebase.auth().onAuthStateChanged(user => {
   if(user) {
     userID = user.uid;
@@ -325,7 +331,8 @@ firebase.auth().onAuthStateChanged(user => {
 
     socket.emit('isUserValid', userID, topic);
     socket.on('userValidResults', function(result) {
-      if (!result) {
+      console.log(result);
+      if (result === 'unauthorized') {
         window.location.href = "main.html";
       } else {
         refreshHeadings(true);
@@ -337,6 +344,13 @@ firebase.auth().onAuthStateChanged(user => {
           highlightAll();
           refreshHeadings(true);
         })
+
+        if (result === 'editor') {
+          document.getElementById('saveButton').title = 'Since you are not the owner, saving your changes will only affect the way you view this page';
+          var disableButtons = ["renameButton","publishButton","deletePageButton"];
+          changeAttr(disableButtons, 'disabled', true);
+          changeAttr(disableButtons, 'onclick', null);
+        }
 
         document.getElementById('saveButton').onclick = function(e) {
           e.preventDefault();

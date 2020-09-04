@@ -97,25 +97,32 @@ function createNewDivAnchor() {
 function highlightAll() {
   Prism.highlightAll();
   for (var pre of document.getElementsByTagName('pre')) (function(pre) {
-    if (!pre.classList.contains('sectionTextArea-textArea')) {
-      pre.classList.add('sectionTextArea-textArea');
+    if (pre.classList.contains('language-javascript') || pre.classList.contains('language-js')) {
+      if (!pre.classList.contains('sectionTextArea-textArea')) {
+        pre.classList.add('sectionTextArea-textArea');
 
-      var newDiv = document.createElement('div');
-      pre.parentNode.insertBefore(newDiv, pre);
+        var newDiv = document.createElement('div');
+        pre.parentNode.insertBefore(newDiv, pre);
 
-      newDiv.classList.add('sectionTextArea-outer');
-      pre.remove();
+        newDiv.classList.add('sectionTextArea-outer');
+        pre.remove();
 
-      var newButton = document.createElement("button");
-      newButton.innerHTML = "Run";
-      newButton.classList.add('sectionTextArea-AlignToRight');
-      newButton.classList.add('isButton');
-      newButton.onclick = function() {
-        runBlock(pre);
+        var newButton = document.createElement("button");
+        newButton.innerHTML = "Run";
+        newButton.classList.add('sectionTextArea-AlignToRight');
+        newButton.classList.add('isButton');
+        newButton.onclick = function() {
+          runBlock(pre);
+        }
+
+        newDiv.appendChild(newButton);
+        newDiv.appendChild(pre);
       }
-
-      newDiv.appendChild(newButton);
-      newDiv.appendChild(pre);
+      else {
+        pre.previousSibling.onclick = function() {
+          runBlock(pre);
+        }
+      }
     }
   })(pre)
 }
@@ -314,6 +321,7 @@ firebase.auth().onAuthStateChanged(user => {
   if(user) {
     userID = user.uid;
     topic = window.location.href.split('?')[1].split('#')[0];
+    document.getElementById('pageTitle').innerHTML = topic;
 
     socket.emit('isUserValid', userID, topic);
     socket.on('userValidResults', function(result) {

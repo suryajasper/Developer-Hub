@@ -99,6 +99,11 @@ io.on('connection', function(socket){
       socket.emit('userPageRes', snapshot.val());
     })
   })
+	socket.on('getGallery', function() {
+    gallery.once('value', function(snapshot) {
+      socket.emit('galleryRes', snapshot.val());
+    })
+  })
   socket.on('rename', function(userID, oldTitle, newTitle) {
     userInfo.child(userID).child('unpublishedpages').child(oldTitle).once('value').then(function(snapshot) {
       var data = snapshot.val();

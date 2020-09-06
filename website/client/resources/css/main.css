@@ -56,20 +56,28 @@ body {
   position: fixed;
   text-align: center;
 }
+@-webkit-keyframes glow {
+  from {
+    text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #e60073, 0 0 40px #e60073, 0 0 50px #e60073, 0 0 60px #e60073, 0 0 70px #e60073;
+  } to {
+    text-shadow: 0 0 20px #fff, 0 0 30px #ff4da6, 0 0 40px #ff4da6, 0 0 50px #ff4da6, 0 0 60px #ff4da6, 0 0 70px #ff4da6, 0 0 80px #ff4da6;
+  }
+}
 .languageSelection {
   height: 50px;
   margin: 10px;
   cursor: pointer;
-  background-color: rgb(38, 64, 36);
+  background: linear-gradient(to left, rgb(47, 43, 89), rgb(53, 46, 119));
   border-width: 0px;
   border-radius: 6px;
+  font-size: 1em;
   color: white;
   display: inline-block;
 }
 .languageSelection:hover {
-  background-color: rgb(11, 62, 30);
-  font-size: 18px;
-  -webkit-transition: 1s;
+  -webkit-animation: glow 0.5s ease-in-out infinite alternate;
+  -moz-animation: glow 0.5s ease-in-out infinite alternate;
+  animation: glow 0.5s ease-in-out infinite alternate;
 }
 .code {
   background-color: rgb(176, 176, 176);
@@ -268,7 +276,7 @@ input::-webkit-inner-spin-button {
   margin: 0;
 }
 
-button:not(.sectionTextArea-AlignToRight):not(.dropbtn):not(.menubutton), .new_page_ref, .formatLikeButton {
+button:not(.sectionTextArea-AlignToRight):not(.dropbtn):not(.menubutton):not(.noButtonCss), .new_page_ref, .formatLikeButton {
   margin-right: 5px;
   margin-top: 10;
   background-color:#414141;
@@ -279,7 +287,7 @@ button:not(.sectionTextArea-AlignToRight):not(.dropbtn):not(.menubutton), .new_p
   cursor: pointer;
   display: block;
 }
-button:not(.sectionTextArea-AlignToRight):hover, .formatLikeButton:hover {
+button:not(.sectionTextArea-AlignToRight):not(.noButtonCss):hover, .formatLikeButton:hover {
   background-color: rgb(175, 178, 232);
 }
 

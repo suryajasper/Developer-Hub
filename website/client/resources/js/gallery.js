@@ -4,10 +4,13 @@ initializeFirebase();
 
 var userID;
 
+var showUser = window.location.href.split('?')[1] === 'userCreated';
+
 function addButtonLink(trId, name, href) {
   var button = document.createElement('button');
   button.innerHTML = name;
   button.classList.add('languageSelection');
+  button.classList.add('noButtonCss');
   button.onclick = function() {
     window.location.href = href;
   }
@@ -21,31 +24,39 @@ firebase.auth().onAuthStateChanged(user => {
     document.getElementById('newPageButton').onclick = function() {
       document.getElementById('newPageForm').style.display = 'block';
     }
-
-    socket.emit('getUserPages', userID);
-    socket.on('userPageRes', function(userPages) {
-      if (userPages !== null) {
-        if ('unpublishedpages' in userPages) {
-          var names = Object.keys(userPages.unpublishedpages);
-          document.getElementById('unfinishedH2').innerHTML = 'Your Unfinished Pages (' + names.length.toString() + ')';
-          for (var name of names) {
-            addButtonLink('unfinishedTr', name, 'tutorialpage.html?' + name);
+    if (showUser) {
+      socket.emit('getUserPages', userID);
+      socket.on('userPageRes', function(userPages) {
+        if (userPages !== null) {
+          if ('unpublishedpages' in userPages) {
+            var names = Object.keys(userPages.unpublishedpages);
+            document.getElementById('unfinishedH2').innerHTML = 'Your Unfinished Pages (' + names.length.toString() + ')';
+            for (var name of names) {
+              addButtonLink('unfinishedTr', name, 'tutorialpage.html?' + name);
+            }
+          } else {
+            document.getElementById('unfinishedH2').innerHTML = 'Your Unfinished Pages (0)';
           }
-        } else {
-          document.getElementById('unfinishedH2').innerHTML = 'Your Unfinished Pages (0)';
-        }
 
-        if ('publishedpages' in userPages) {
-          var names = Object.keys(userPages.publishedpages);
-          document.getElementById('finishedPublicH2').innerHTML = 'Your Published Pages (' + names.length.toString() + ')';
-          for (var name of names) {
-            addButtonLink('finishedPublicTr', userPages.publishedpages[name], 'tutorialpage.html?' + userPages.publishedpages[name]);
+          if ('publishedpages' in userPages) {
+            var names = Object.keys(userPages.publishedpages);
+            document.getElementById('finishedPublicH2').innerHTML = 'Your Published Pages (' + names.length.toString() + ')';
+            for (var name of names) {
+              addButtonLink('finishedPublicTr', userPages.publishedpages[name], 'tutorialpage.html?' + userPages.publishedpages[name]);
+            }
+          } else {
+            document.getElementById('finishedPublicH2').innerHTML = 'Your Published Public Pages (0)';
           }
-        } else {
-          document.getElementById('finishedPublicH2').innerHTML = 'Your Published Public Pages (0)';
         }
-      }
-    })
+      })
+    } else {
+      socket.emit('getGallery');
+      socket.on('galleryRes', function(gallery) {
+        for (var pageName of Object.keys(gallery)) {
+          addButtonLink('latestTr', pageName, 'tutorialpage.html?' + pageName);
+        }
+      })
+    }
   }
 });
 
@@ -61,7 +72,7 @@ document.getElementById('createPage').onclick = function(e) {
   window.location.href = 'tutorialpage.html?' + document.getElementById('pageName').value;
 }
 
-if (window.location.href.split('?')[1] === 'userCreated') {
+if (showUser) {
   document.getElementById('userCreatedStuff').style.display = 'block';
   document.getElementsByTagName('h1')[0].innerHTML = 'Your Pages';
 } else {

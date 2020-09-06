@@ -561,15 +561,35 @@ hr.line {
   position: relative;
 }
 
-.notificationDiv {
-  width: 100%;
-  display: block;
+.notTable {
+  border-collapse: collapse;
+  width: 98vw;
 }
-.notificationDiv .notificationIcon {
+.notTable tbody {
+  width: 100px;
+}
+.notificationRow .notificationIcon {
   height: 35px;
-  float: left;
+}
+.notificationRow a {
+  color: rgb(154, 210, 156);
+}
+.notificationRow td, th {
+  border: 1px solid white;
+  text-align: center;
+  padding: 10px;
+}
+.notTable tr {
+  background-color: rgb(38, 38, 38);
+}
+.notTable tr:nth-child(2n+2) {
+  background-color: rgb(19, 19, 19);
+}
+.notTable tr:nth-child(2n+2) {
+  background-color: rgb(23, 23, 23);
+}
+.notTable hr {
+  width: 100%;
 }
 .notificationDiv .notificationText {
-  margin : 0 0 0 55px;
-  padding: 5px;
 }

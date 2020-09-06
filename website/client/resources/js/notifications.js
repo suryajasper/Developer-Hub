@@ -11,19 +11,29 @@ String.prototype.replaceAll = function(toReplace, replaceWith) {
   return replaced;
 }
 
-function addNotification(type, text) {
-  var notDiv = document.createElement('div');
-  notDiv.classList.add("notificationDiv");
+function addNotification(type, text, time) {
+  var notDiv = document.createElement('tr');
+  notDiv.classList.add("notificationRow");
 
+  var td = document.createElement('td');
   var notIcon = document.createElement('img');
   notIcon.classList.add("notificationIcon");
   notIcon.src = "resources/images/notificationIcons/" + type + '.svg';
-  notDiv.appendChild(notIcon);
+  notIcon.setAttribute('title', type);
+  td.appendChild(notIcon);
+  notDiv.appendChild(td);
 
+  td = document.createElement('td');
   var notText = document.createElement('p');
-  notText.classList.add("notificationText");
+  notText.innerHTML = time;
+  td.appendChild(notText);
+  notDiv.appendChild(td);
+
+  td = document.createElement('td');
+  var notText = document.createElement('p');
   notText.innerHTML = '<b>' + type + ':</b> ' + text;
-  notDiv.appendChild(notText);
+  td.appendChild(notText);
+  notDiv.appendChild(td);
 
   document.getElementById('notifications').appendChild(notDiv);
 }
@@ -36,9 +46,8 @@ firebase.auth().onAuthStateChanged(user => {
       if (notifications !== null) {
         for (var type of Object.keys(notifications)) {
           for (var notObj of Object.values(notifications[type])) {
-            addNotification(type.replaceAll('_', ' '), notObj.title);
+            addNotification(type.replaceAll('_', ' '), notObj.title, notObj.time);
           }
-          document.getElementById('notifications').appendChild(document.createElement('hr')); // add a line
         }
       }
     })

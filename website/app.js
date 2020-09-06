@@ -15,6 +15,17 @@ var port = process.env.PORT || 3000;
 
 var serviceAccount = require("/Users/suryajasper2004/Downloads/developer-hub-service-account.json");
 
+Date.prototype.timeNow = function(){
+	return ((this.getHours() < 10)?"0":"") +
+				 ((this.getHours()>12)?(this.getHours()-12):this.getHours()) +
+				 ":"+ ((this.getMinutes() < 10)?"0":"") + this.getMinutes() + " " +
+				 ((this.getHours()>12)?('PM'):'AM');
+};
+
+Date.prototype.today = function () {
+    return ((this.getDate() < 10)?"0":"") + this.getDate() +"/"+(((this.getMonth()+1) < 10)?"0":"") + (this.getMonth()+1) +"/"+ this.getFullYear();
+}
+
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: "https://developer-hub-2b06f.firebaseio.com"
@@ -158,9 +169,11 @@ io.on('connection', function(socket){
 								length = Object.values(updateSnap).length;
 							}
 							var update = {};
+							var date = new Date();
 							update[length] = {
-								title: "New update request on <a href = \"tutorialPage.html?" + pageName + "\">" + pageName + "</a>.",
+								title: "New update request on <a href = \"tutorialPage.html?" + pageName + "\">" + pageName + "</a>. <a href = \"viewOnly.html?" + pageName + "\">Click here to view</a>",
 								pageName: pageName,
+								time: date.today() + " at " + date.timeNow(),
 								content: changeSnap.val().content
 							};
 							updateRequestRef.update(update);
@@ -173,6 +186,18 @@ io.on('connection', function(socket){
 	socket.on('getNotifications', function(userID) {
 		notifications.child(userID).once("value", function(snap) {
 			socket.emit('notificationsRes', snap.val());
+		})
+	})
+	socket.on('viewUpdateRequestChanges', function(userID, topic) {
+		notifications.child(userID).child("Update_Request").once('value', function(snap) {
+			if (snap.val() !== null) {
+				for (var obj of Object.values(snap.val())) {
+					if (obj.pageName === topic) {
+						socket.emit('updateRequestChangesViewResult', obj);
+						break;
+					}
+				}
+			}
 		})
 	})
 })

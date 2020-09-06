@@ -19,7 +19,7 @@ function addNotification(type, text, time) {
   var notIcon = document.createElement('img');
   notIcon.classList.add("notificationIcon");
   notIcon.src = "resources/images/notificationIcons/" + type + '.svg';
-  notIcon.setAttribute('title', type);
+  notIcon.title = type;
   td.appendChild(notIcon);
   notDiv.appendChild(td);
 

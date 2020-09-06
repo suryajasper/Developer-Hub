@@ -25,6 +25,7 @@ var database = admin.database();
 var gallery = database.ref("gallery");
 var userInfo = database.ref('userInfo');
 var userChanges = database.ref('userChanges');
+var notifications = database.ref('notifications');
 
 io.on('connection', function(socket){
   socket.on('changeSiteData', function(data) {
@@ -37,12 +38,8 @@ io.on('connection', function(socket){
 						if (gallerySnap.val().authorID === data.userID) {
 							gallery.child(data.topic).update({content: data.content});
 						} else {
-							userChanges.child(data.userID).child(data.topic).once('value', function(userChangesSnap) {
-								if (userChangesSnap.val() !== null) {
-									userChanges.child(data.userID).child(data.topic).update({
-										content: data.content
-									})
-								}
+							userChanges.child(data.userID).child(data.topic).update({
+								content: data.content
 							})
 						}
           }
@@ -149,6 +146,35 @@ io.on('connection', function(socket){
       })
     })
   })
+	socket.on('sendUpdateRequest', function(userID, pageName) {
+		userChanges.child(userID).child(pageName).once('value', function(changeSnap) {
+			if (changeSnap.val() !== null) {
+				gallery.child(pageName).once('value', function(gallerySnap) {
+					if (gallerySnap.val() !== null) {
+						var updateRequestRef = notifications.child(gallerySnap.val().authorID).child('Update_Request');
+						updateRequestRef.once('value', function(updateSnap) {
+							var length = 0;
+							if (updateSnap.val() !== null) {
+								length = Object.values(updateSnap).length;
+							}
+							var update = {};
+							update[length] = {
+								title: "New update request on <a href = \"tutorialPage.html?" + pageName + "\">" + pageName + "</a>.",
+								pageName: pageName,
+								content: changeSnap.val().content
+							};
+							updateRequestRef.update(update);
+						})
+					}
+				})
+			}
+		})
+	})
+	socket.on('getNotifications', function(userID) {
+		notifications.child(userID).once("value", function(snap) {
+			socket.emit('notificationsRes', snap.val());
+		})
+	})
 })
 
 http.listen(port, function(){

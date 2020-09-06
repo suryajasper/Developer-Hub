@@ -24,6 +24,7 @@
                 <a id = "saveButton">Save</a>
                 <a id = "renameButton">Rename</a>
                 <a id = "publishButton">Publish</a>
+                <a id = "updateRequest" data-title = "Send a request to the author of this tutorial page to implement your changes">Send Update Request</a>
                 <a id = "duplicateButton">Make a Copy</a>
                 <a id = "deletePageButton">Delete this Page</a>
               </div>
@@ -64,6 +65,13 @@
         </div>
         <div style = "float: right;">
           <button style="margin-top: 6px; background-color: rgb(159, 22, 146); display: none;" id = "exitModeButton">Exit mode</button>
+          <div id = "fileDropdown" style = "display: inline-block;" class = "dropdown">
+            <button class = "dropbtn menubutton">My Profile</button>
+            <div class = "dropdown-content">
+              <a href = "main.html?userCreated">My pages</a>
+              <a id = "editButton">Edit Profile</a>
+            </div>
+          </div>
         </div>
       </header>
     </div>

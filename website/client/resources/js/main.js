@@ -345,12 +345,15 @@ firebase.auth().onAuthStateChanged(user => {
           refreshHeadings(true);
         })
 
+        var disableButtons;
         if (result === 'editor') {
           document.getElementById('saveButton').title = 'Since you are not the owner, saving your changes will only affect the way you view this page';
-          var disableButtons = ["renameButton","publishButton","deletePageButton"];
-          changeAttr(disableButtons, 'disabled', true);
-          changeAttr(disableButtons, 'onclick', null);
+          disableButtons = ["renameButton","publishButton","deletePageButton"];
+        } else {
+          disableButtons = ["updateRequest"];
         }
+        changeAttr(disableButtons, 'disabled', true);
+        changeAttr(disableButtons, 'onclick', null);
 
         document.getElementById('saveButton').onclick = function(e) {
           e.preventDefault();
@@ -668,4 +671,10 @@ document.getElementById('duplicateButton').onclick = function(e) {
 document.getElementById('deletePageButton').onclick = function(e) {
   e.preventDefault();
   socket.emit('deletePage', userID, topic);
+}
+
+document.getElementById('updateRequest').onclick = function(e) {
+  e.preventDefault();
+  savePageData();
+  socket.emit('sendUpdateRequest', userID, topic);
 }

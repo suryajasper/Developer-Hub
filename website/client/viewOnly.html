@@ -16,6 +16,9 @@
     <div class = "header-outer">
       <header class = "header">
         <img onclick = "window.location.href = 'main.html';" src = "../resources/images/home.png" style = "height: 40px; width: 46px; position: relative; margin-top: 5px; margin-left: 5px; margin-right: 5px; cursor: pointer;"></img>
+        <div style = "display: inline-block; position: fixed; margin-top: 0px;">
+          <button id = "approveChangesFirstButton" class = "buttonCss" style = "background-color: rgb(107, 80, 215); position: relative; color: white; margin-top: 5px; margin-left: 5px; margin-right: 5px;">Approve Changes</button>
+        </div>
         <div style = "float: right;">
           <div id = "fileDropdown" style = "display: inline-block;" class = "dropdown">
             <button class = "dropbtn menubutton">My Profile</button>
@@ -36,6 +39,14 @@
     <div class = "main" style = "margin-top: 50px;">
 
     </div>
+    <div class = "centered prettyForm" id = "approveChangesPopup">
+      When you approve this request, your entire tutorial page will be replaced with this updated version. Please continue if you are completely sure this is what you want to do.
+      <br><br><span style = "text-align: left; color: #77c476;">Comments (optional)</span>
+      <textarea id = "approveChangesComments" class = "ignoreCSS updateRequestPopup">Great fix! I have implemented your changes!</textarea>
+      <button id = "approveChangesButton" style = "color: black; width: 99%; display: block; background-color: rgb(80, 215, 163); position: relative; font-size: 1em; margin-top: 5px; margin-left: 5px; margin-right: 5px;">Confirm</button>
+    </div>
+    <div style = "display: none;" class = "centered prettyForm" id = "alertPopup"></div><script src = "resources/js/alerts.js"></script>
+
     <script src="https://www.gstatic.com/firebasejs/7.9.3/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.9.3/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.9.3/firebase-database.js"></script>

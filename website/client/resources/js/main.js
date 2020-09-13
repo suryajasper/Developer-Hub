@@ -678,31 +678,3 @@ document.getElementById('updateRequest').onclick = function(e) {
   savePageData();
   socket.emit('sendUpdateRequest', userID, topic);
 }
-
-var stars = document.getElementById('rate').children;
-for (var i = 0; i < stars.length; i++) (function(i) {
-  stars[i].onmouseover = function(e) {
-    e.preventDefault();
-    for (var j = 0; j <= i; j++) {
-      stars[j].src = 'resources/images/star.svg';
-    }
-  }
-  stars[i].onmouseout = function(e) {
-    e.preventDefault();
-    for (var j = 0; j <= i; j++) {
-      stars[j].src = 'resources/images/star_unfilled.svg';
-    }
-  }
-  stars[i].onclick = function(e) {
-    e.preventDefault();
-    for (var j = 0; j < stars.length; j++) {
-      stars[j].onmouseover = null;
-      stars[j].onmouseout = null;
-    }
-  }
-})(i);
-
-document.getElementById('rateOpenButton').onclick = function(e) {
-  e.preventDefault();
-  document.getElementById('ratePopup').style.display = 'block';
-}

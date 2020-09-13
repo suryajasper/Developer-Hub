@@ -196,6 +196,10 @@ textarea.contentInCSS:focus {
 }
 */
 
+button {
+  outline: none;
+}
+
 textarea:not(.ignoreCSS)::-webkit-outer-spin-button,
 textarea:not(.ignoreCSS)::-webkit-inner-spin-button {
   -webkit-appearance: none;
@@ -617,4 +621,18 @@ hr.line {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.inline-block-children * {
+  display: inline-block;
+}
+
+.rateButton {
+  padding-bottom: 5px;
+  padding-top: 5px;
+  cursor: pointer;
+  border: none;
+  color: white;
+  background-color: #8d721b;
+  margin: auto;
+  position: relative;
 }

@@ -64,6 +64,7 @@
           </select>
         </div>
         <div style = "float: right;">
+          <button style="margin-top: 6px; background-color: #9f6816; display: inline-block;" id = "rateOpenButton">Rate Page</button>
           <button style="margin-top: 6px; background-color: rgb(159, 22, 146); display: none;" id = "exitModeButton">Exit mode</button>
           <div id = "fileDropdown" style = "display: inline-block;" class = "dropdown">
             <button class = "dropbtn menubutton">My Profile</button>
@@ -83,6 +84,21 @@
     </div>
     <div class = "main" style = "margin-top: 50px;">
 
+    </div>
+    <div class = "centered" id = "ratePopup" style = "display: none;">
+      <form class = "prettyForm" style = "width: 60vw;">
+        <div class = "inline-block-children">
+          <div id = "rate">
+            <img src = "resources/images/star_unfilled.svg" width = "30px" height = "30px">
+            <img src = "resources/images/star_unfilled.svg" width = "30px" height = "30px">
+            <img src = "resources/images/star_unfilled.svg" width = "30px" height = "30px">
+            <img src = "resources/images/star_unfilled.svg" width = "30px" height = "30px">
+            <img src = "resources/images/star_unfilled.svg" width = "30px" height = "30px">
+          </div>
+        </div>
+        <textarea class = "ignoreCSS" style = "outline: none; width: 100%; height: 160px;" placeholder = "comments (optional)"></textarea>
+        <button id = "submitRating" class = "noButtonCss rateButton" style = "width: 100%; font-size: 1em;">Rate</button>
+      </form>
     </div>
     <div id = "renameForm" class = "centered" style = "display: none;">
       <form class = "prettyForm">

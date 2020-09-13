@@ -181,20 +181,6 @@ textarea.contentInCSS {
 textarea.contentInCSS:focus {
   outline: none;
 }
-/*
-.contentInCSS {
-  width: 500px;
-  height: 300px;
-  padding: 10px;
-  background-color: #444;
-  color: white;
-  font-size: 14px;
-  font-family: monospace;
-}
-.statement {
-  color: orange;
-}
-*/
 
 textarea:not(.ignoreCSS)::-webkit-outer-spin-button,
 textarea:not(.ignoreCSS)::-webkit-inner-spin-button {
@@ -598,8 +584,6 @@ hr.line {
 }
 .notTable hr {
   width: 100%;
-}
-.notificationDiv .notificationText {
 }
 .updateRequestPopup {
   width: 100%;

@@ -616,5 +616,21 @@ hr.line {
   font-size: 0.75em;
   text-align: left;
   width: -moz-fit-content;
-  padding: 6px;
+  padding: 3px 6px 3px 6px;
+  margin: 3px;
+  display: inline-block;
+}
+
+.prereqRemove {
+  position: relative;
+  padding: 0px 3px 0px 3px;
+  margin-left: 4px;
+  border: none;
+  outline: none;
+  background-color: #292929;
+  color: white;
+  font-weight: bold;
+}
+.prereqRemove:hover {
+  background-color: red;
 }

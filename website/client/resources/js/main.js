@@ -631,7 +631,33 @@ document.getElementById('publishButton').onclick = function(e) {
 }
 
 //------------
+var difficulties = ['Beginner', 'Intermediate', 'Experienced', 'Advanced', 'Professional'];
+var diffSlider = document.getElementById('difficultySlider');
+diffSlider.oninput = function() {
+  document.getElementById('difficultyMode').innerHTML = difficulties[parseInt(diffSlider.value)];
+}
+var prereqIn = document.getElementById('prereqIn');
+prereqIn.onkeypress = function(e) {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    var prereqDiv = document.createElement('div');
+    prereqDiv.classList.add('prereq');
+    prereqDiv.innerHTML = prereqIn.value;
 
+    var prereqRemoveButton = document.createElement('button');
+    prereqRemoveButton.classList.add('prereqRemove');
+    prereqRemoveButton.classList.add('noButtonCSS');
+    prereqRemoveButton.innerHTML = 'X';
+    prereqRemoveButton.onclick = function() {
+      prereqDiv.remove();
+    }
+    prereqDiv.appendChild(prereqRemoveButton);
+
+    document.getElementById('prereqDiv').appendChild(prereqDiv);
+
+    prereqIn.value = '';
+  }
+}
 //------------
 
 function clearAllExecs() {

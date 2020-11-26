@@ -27,6 +27,7 @@
                 <a id = "updateRequest" data-title = "Send a request to the author of this tutorial page to implement your changes">Send Update Request</a>
                 <a id = "duplicateButton">Make a Copy</a>
                 <a id = "deletePageButton">Delete this Page</a>
+                <a id = "difficultyConfig">Tutorial Difficulty</a>
               </div>
             </div>
             <div id = "editDropdown" class = "dropdown">
@@ -106,6 +107,17 @@
             <input class = "formatLikeButton" type = "submit" style = "display: inline-block; border: none; margin-right: 5px;" id = "publishPage" value = "Publish"></input>
             <button style = "display: inline-block;" id = "publishCancel">Cancel</button>
           </div>
+        </div>
+      </form>
+    </div>
+    <div id = "difficultyForm" class = "centered">
+      <form class = "prettyForm">
+        Tutorial Difficulty<br>
+        <input type = "range" min = "1" max = "5" value = "3"><br>
+        Prerequisite Understanding <span class = "description"><br>(enter prerequisite languages/APIs/concepts)</span><br>
+        <input type = "text" placeholder="">
+        <div id = "prereqDiv">
+          <p class = "prereq">bruh</p>
         </div>
       </form>
     </div>

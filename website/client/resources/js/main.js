@@ -630,6 +630,10 @@ document.getElementById('publishButton').onclick = function(e) {
   }
 }
 
+//------------
+
+//------------
+
 function clearAllExecs() {
   for (var exec of currentCodeBlockExecs) {
     exec.remove();
